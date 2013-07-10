@@ -6,16 +6,7 @@ of jsdocgen but the library can be used on its own and doesn't have other
 dependencies.
 
 
+Authors
+-------
 
-**Development plan:**  
-<http://62.141.53.240/docviewjs/ROADMAP.txt>
-
-
-
-**Unitests for the library:**  
-<http://62.141.53.240/docviewjs/tests/tests.html>  
-<http://62.141.53.240/docviewjs/tests/tests.html#release>
-
-
-
-\- Borislav
+Borislav Peev (borislav.asdf at gmail dot com)
