@@ -1,0 +1,36 @@
+first ( 0.5 )
+
+	---
+
+future
+	
+	Style: Improve error handling, things expected to work should throw rather than returing bool or null (like View.addView()) (search for 
+	return null or return false)
+
+	Style: Use .defineStatic for all static stuff
+	
+	Revise OOP. Get rid of extends and use only mixins and interfaces. mixins should keep track of what is mixed in the object and .instanceof()
+	should check it if the real instanceof fails.
+
+	In the testsuite the tootip for the "Label" in not shown in IE. This is because of the order in which XML attributes are iterated which is different in IE. Since the argument order can not be relied upon other solution is needed.
+
+	Remove IE9 support since IE11 is on the way
+		Add View.Attached, View.Dettached, View.Moved events
+		Move layouts to use flex boxes
+
+	Would be nice if EventHandler's callback receives reference to the EventHandler somehow.
+	
+	View.addView( view, 'after'|'before', otherView )
+	View.addView( view, 'after#otherviewid'|'before#otherviewid' )
+	
+	Custom scrolling ( hidden scrollbars, shown only while scrolling over the content, mac like )
+	
+	Button(+toggle,+radio), Input(+multiline,+password), Overlay, Popup, Dialog (+in separate window), Tooltip, Dropdown list,
+	Virtual scroller, Date picker, Grid, Slider, Spinner (input with arrows up and down to change numbers),Menu,
+	Autocomplete, Progress bar, Tree
+
+	We could have some kind of model where templates are defined for each view state and when the state is changed
+	the view's DOM is changed but preserving the same data, (hint: see Windows8 JS videos). This would allow for more
+	freedom of designers and much better theming. There could be an option to crate simple rules in the template,
+	like chainging the CSS class, changing the attributes, changing the text based on selector, to avoid re-layout
+	for changes that rarely needs it like :disabled, :activated, :focus, .etc.

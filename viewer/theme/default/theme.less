@@ -1,0 +1,283 @@
+@import "../../../deps/docviewjs/theme/default/theme.less";
+@import "./google-code-prettify/prettify.less";
+
+.AppView.jsdocgen {
+	overflow-y: scroll;
+}
+
+.LoadingIndicator.jsdocgen {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	background-color: whitesmoke;
+	border-top-left-radius: @small-border-radius;
+	padding: @small-margin-v @small-padding-h;
+	zoom: 0.9;
+	padding-right: ~"@{safe-scrollbar-size}px";
+}
+
+#DocBlockViewer-Footer {
+	height: 70px;
+	text-align: right;
+	padding-left: 2.5%;
+	font-size: 0.8em;
+	cursor: default;
+	.transition( opacity, 0.6s );
+}
+
+#DocBlockViewer-Footer:not(:hover) {
+	.opacity( @opacity-disabled );
+}
+
+
+.DocBlockViewer {
+
+	// make the header look like it is above the docs on big screen
+	// but on phone we want it above the contents
+	#DocBlockViewer-Header {
+		padding-left: 2.5%;
+		white-space: nowrap;
+		overflow-x: hidden;
+		width: 100%;
+		// margin-left: 30%;
+		// padding-left: 1.5%;
+		// position: absolute;
+		// width: 70%;
+	}
+
+	// #DocBlockViewer-Header hr {
+	// 	margin: 0;
+	// }
+
+	#DocBlockViewer-Sidebar .label,
+	#DocBlockViewer-Renderer .label {
+		cursor: default;
+	}
+
+	#DocBlockViewer-Sidebar .HtmlArea .label.small,
+	#DocBlockViewer-Renderer .label.small {
+		padding: 0 3px;
+		font-size: 0.75em;
+		vertical-align: middle;
+		line-height: 1.3em;
+		font-family: @font-family-monospace;
+		margin-top: 0.35em;
+	}
+
+	//#DocBlockViewer-Sidebar .HtmlArea .label.small + .label.small,
+	#DocBlockViewer-Renderer .label.small + .label.small {
+		margin-left: 1px;
+	}
+
+	//#DocBlockViewer-Sidebar .HtmlArea .label:not(.small) + .label:not(.small),
+	#DocBlockViewer-Renderer .label:not(.small) + .label:not(.small) {
+		margin-left: 2px;
+	}
+
+	#DocBlockViewer-Sidebar {
+		& {
+			padding-right: 2.5%;
+			padding-left: 2.5%;
+		}
+
+		.AccordionItem + .AccordionItem {
+			margin-top: @tiny-margin-v;
+		}
+
+		.AccordionItem > .Label {
+			padding: (@small-padding-v * 0.75) (@small-padding-h * 0.75);
+			font-size: 90%;
+		}
+
+		.HtmlArea {
+			padding-left: @medium-padding-h;
+			padding-right: @medium-padding-h;
+			margin-bottom: @small-margin-v;
+			white-space: nowrap;
+			overflow-x: hidden;
+		}
+
+		.HtmlArea h6 {
+			margin-bottom: 0;
+			padding-bottom: @tiny-padding * 1.5;
+			border-bottom: 1px solid lighten( @border-color, 10% );
+			//padding: @small-padding-v @small-padding-h;
+			//background-color: #f5f5f5;
+		  	//border-radius: @small-border-radius;
+		}
+
+		.HtmlArea h6 + ul {
+			margin-top: @small-margin-v;
+		}
+
+		.HtmlArea ul > li {
+			padding: 0 3px 0 3px;
+			position: relative;
+		}
+
+
+		.HtmlArea ul > li:hover {
+			background-color: @bg-color-hl;
+			border-radius: @small-border-radius;
+		}
+		
+		.HtmlArea ul > li > a {
+			white-space: nowrap;
+			display: block;
+		}
+
+		.HtmlArea ul > li:hover > a {
+			text-decoration: none;
+		}
+
+		.HtmlArea ul > li > .label.small {
+		 	z-index: 1;
+		 	position: absolute;
+			right: 3px;
+		 	//border: 2px solid @bg-color;
+		 	//margin-top: 2px;
+		}
+
+		// .HtmlArea ul > li:hover > .label {
+		//  	border-color: @bg-color-hl;
+		// }
+
+		> .TabStrip {
+			font-size: 0.8em; //this is a bit too small but haven't found the balance yet
+			width: 100%;
+
+			> .Tab {
+				padding: (@small-padding-v * 0.8) (@small-padding-h * 0.8);
+			}
+		}
+	}
+
+	#DocBlockViewer-Contents {
+		border: 1px solid @border-color;
+		border-top-width: 0;
+		border-radius: 0 0 @small-border-radius @small-border-radius;
+	}
+
+	#DocBlockViewer-Renderer {
+		& {
+			padding-left: 1.5%;
+			// margin-top: (@font-size * 5);
+		}
+
+		// we are displaying everything in one table to have same width of columns of all members
+		// these styles are to make them look as separete tables
+		table.members {
+
+			& {
+				border-width: 0;
+			}
+
+			> tbody > tr > td:first-child {
+				white-space: nowrap;
+			}
+
+			> tbody > tr > td:last-child {
+				border-right: 1px solid @border-color;
+			}
+
+			> tbody > tr.heading > td {
+				font-weight: bold;
+			}
+
+			> tbody > tr.section > td {
+				padding: 0;
+				border-width: 0 0 1px 0;
+			}
+
+			> tbody > tr.section + tr > td:first-child {
+				border-top-left-radius: @small-border-radius;
+			}
+
+			> tbody > tr.section + tr > td:last-child {
+				border-top-right-radius: @small-border-radius;
+			}
+
+			> tbody > tr.last > td {
+				border-bottom: 1px solid @border-color;
+			}
+
+			> tbody > tr.last > td:first-child {
+				border-bottom-left-radius: @small-border-radius;
+			}
+
+			> tbody > tr.last > td:last-child {
+				border-bottom-right-radius: @small-border-radius;
+			}
+		}
+	}
+
+	#DocBlockViewer-Renderer > h5,
+	#DocBlockViewer-Renderer :not(.alert) > h5 {
+		margin-top: 2em;
+		color: #DB7100;
+	}
+
+	// hide tab text on tablets so it wont go out of the sidebar
+	.AppView.device-tablet & #DocBlockViewer-Sidebar > .TabStrip > .Tab:not(.active) > .Txt,
+	.AppView.device-desktop & #DocBlockViewer-Sidebar > .TabStrip > .Tab:not(.active) > .Txt {
+		display: none;
+	}
+}
+
+
+// this applies to tablet and desktop
+@media ( min-width: @min-width-tablet ) {
+
+	//we have two borders here because one thing may be longer than the other and we want the border of the longest thing
+	.DocBlockViewer {
+		
+		#DocBlockViewer-Sidebar {
+			width: 30%;
+			overflow-x: hidden;
+			border-right: 1px solid @border-color;
+		}
+
+		#DocBlockViewer-Renderer {
+			width: 70%;
+			margin-left: -1px;
+			border-left: 1px solid @border-color;
+		}
+	}
+}
+
+@media ( max-width: @max-width-phone ) {
+	
+	.DocBlockViewer {
+		
+		#DocBlockViewer-Sidebar {
+			padding-left: 2.5%;
+		}
+
+		#DocBlockViewer-Renderer {
+			padding-left: 2.5%;
+			padding-right: 2.5%;
+			margin-top: @medium-margin-v;
+		}
+
+		#DocBlockViewer-Footer {
+			padding-right: 2.5%;
+		}
+
+		#DocBlockViewer-Header {
+		// 	border-bottom-width: 0;
+		// 	position: static;
+		// 	padding-left: 2.5%;
+		// 	margin-left: 0;
+			width: 97.5%;
+		}
+
+		// #DocBlockViewer-Header hr {
+		// 	display: none;
+		// }
+	}
+
+	#DocBlockViewer-Renderer.vfill {
+		height: auto;
+	}
+
+}

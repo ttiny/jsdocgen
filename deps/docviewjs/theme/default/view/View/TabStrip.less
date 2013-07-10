@@ -1,0 +1,38 @@
+.TabStrip {
+	
+	border-bottom: 1px solid @border-color;
+
+	& > .Tab {
+
+		top: 1px;
+		
+		border: 1px solid transparent;
+		border-radius: @small-border-radius @small-border-radius 0 0;
+		padding: @small-padding-v @small-padding-h;
+
+
+		&.active {
+			color: @text-color-active;
+			border-color: @border-color;
+			border-bottom-color: @bg-color;
+		}
+		
+	}
+
+	& > .Tab:not(.active):not(.disabled) {
+		& {
+			color: @link-color;
+		}
+
+		&:hover {
+			background-color: @bg-color-hl;
+			cursor: pointer;
+			color: @link-color-hl;
+			border-bottom: 1px solid @border-color;
+		}
+	}
+
+	& > .Tab + .Tab {
+		margin-left: @tiny-margin;
+	}
+}

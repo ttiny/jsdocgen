@@ -1,0 +1,4 @@
+/**
+ * @private
+ * @author Name Surname <email@address.com>
+ */

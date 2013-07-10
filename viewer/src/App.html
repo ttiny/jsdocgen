@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html><head>
+	<title><!--@=?ProjectName:''--></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<!--@?DEBUG-->
+<script type="text/javascript">
+	if ( location.href.indexOf( '?release' ) > 0 ) {
+		window.DEBUG = false;
+		document.write( '<link rel="stylesheet" href="/*@=JSDOCGEN_LOCATION*/jsdocgen-/*@=JSDOCGEN_THEME*//jsdocgen-/*@=JSDOCGEN_THEME*/.css" /> ');
+		document.write( '<script type="text/javascript" src="/*@=JSDOCGEN_LOCATION*/jsdocgen-/*@=JSDOCGEN_THEME*//jsdocgen-/*@=JSDOCGEN_THEME*/.js"><\/script>' );
+	}
+	else {
+		window.DEBUG = true;
+		var less = { env: 'development', relativeUrls: true };
+		var DOCVIEWJS_LOCATION = '/*@=JSDOCGEN_LOCATION*/jsdocgen-/*@=JSDOCGEN_THEME*//';
+		document.write( '<link rel="stylesheet/less" type="text/css" href="/*@=JSDOCGEN_LOCATION*//*@=JSDOCGEN_DEV_LOCATION*/../theme//*@=JSDOCGEN_THEME*//theme.less" />' );
+		document.write( '<script type="text/javascript" src="/*@=JSDOCGEN_LOCATION*//*@=JSDOCGEN_DEV_LOCATION*/../../deps/docviewjs/tests/less-1.3.3.min.js"><\/script>' );
+		document.write( '<script type="text/javascript" src="/*@=JSDOCGEN_LOCATION*/jsdocgen-/*@=JSDOCGEN_THEME*//jsdocgen-/*@=JSDOCGEN_THEME*/-dev.js"><\/script>' );
+	}
+</script>
+<!--@:
+	<link rel="stylesheet" href="/*@=JSDOCGEN_LOCATION*/jsdocgen-/*@=JSDOCGEN_THEME*//jsdocgen-/*@=JSDOCGEN_THEME*/.css" />
+	<script type="text/javascript" src="/*@=JSDOCGEN_LOCATION*/jsdocgen-/*@=JSDOCGEN_THEME*//jsdocgen-/*@=JSDOCGEN_THEME*/.js"></script>
+-->
+
+
+
+</head><body>
+
+<script type="template/docviewjs" id="tmpl-loading-indicator">
+	<Label class="jsdocgen LoadingIndicator">
+		<Spinner class="Img" />;
+		<Txt text="{str.app.loading}" />
+	</Label>
+</script>
+
+<!-- main -->
+<script type="text/javascript">
+	
+	"use strict";
+
+	// application resources
+	var R = new Config( DocBlockViewer.Locale.EN );
+	R = new Config( {
+		str: {
+			app: {
+				title: document.title,
+				subtitle: "/*@=?ProjectSubtitle:''*/" || R.get( 'str.app.subtitle' )
+			}
+		}
+	}, R );
+
+	(function () {
+
+		var _loading = null;
+		var _loadingTimeOut = null;
+		var _appView = null;
+
+		function _showSpinner ( timeout ) {
+			if ( _loadingTimeOut !== null ) {
+				return;
+			}
+			else if ( _loading == null ) {
+				_loading = $T( 'tmpl-loading-indicator' );
+			}
+
+			_loadingTimeOut = setTimeout( function () {
+				_appView.addView( _loading );
+				_loadingTimeOut = null;
+			}, timeout || 1500 );
+		}
+
+		function _hideSpinner () {
+			if ( _loadingTimeOut === null ) {
+				_appView.removeView( _loading );
+			}
+			else {
+				clearTimeout( _loadingTimeOut );
+				_loadingTimeOut = null;
+			}
+		}
+
+		var _app = new App( function ( app ) {
+
+			function main () {
+				_appView = new View.AppView();
+				_appView.setClass( 'jsdocgen' );
+				_appView.setText( '{str.app.title}' );
+				var docviewer = new DocBlockViewer( {
+					DocsLocation: '/*@=JSDOCGEN_DOCS*/',
+					Lang: '/*@=JSDOCGEN_LANG*/'
+				} );
+				
+				if ( !location.href.startsWith( 'file:///' ) ) {
+					_showSpinner( 1 );
+				}
+				
+				docviewer.once( 'DocBlockViewer.Loaded', function () {
+					docviewer.addEventListener( 'DocBlockViewer.Loading', _showSpinner );
+					docviewer.addEventListener( 'DocBlockViewer.Loaded', _hideSpinner );
+					_hideSpinner();
+				} );
+
+				_appView.addView( docviewer );
+				docviewer.init( R.get( 'str.app.title' ), R.get( 'str.app.subtitle' ) );
+			}
+
+
+			/*@DEBUG*/if ( window.DEBUG ) {
+				//in the debugversion load the templates with AJAX
+				new HttpRequest( '/*@=JSDOCGEN_LOCATION*//*@=JSDOCGEN_DEV_LOCATION*/../theme//*@=JSDOCGEN_THEME*//theme.html', function ( res ) {
+					document.body.innerHTML += res.Data;
+					main();
+				} ).send();
+			} else {/*DEBUG@*/
+				main();
+			/*@DEBUG*/}/*DEBUG@*/
+
+		} );
+
+	})();
+
+	
+
+</script>
+
+</body></html>

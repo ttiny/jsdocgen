@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html><head>
+
+	<title>docviewjs unitests - default theme</title>
+
+	<script type="text/javascript">
+		window.UNITESTS = true;
+
+		if ( location.href.indexOf( '?release' ) > 0 ) {
+			document.write( '<link rel="stylesheet" href="../redist/docviewjs-default/docviewjs-default-uni.css" /> ');
+			document.write( '<script type="text/javascript" src="../redist/docviewjs-default/docviewjs-default-uni.js"><\/script>' );
+		}
+		else {
+			window.DEBUG = true;
+			var less = { env: 'development', relativeUrls: true };
+			document.write( '<link rel="stylesheet/less" type="text/css" href="../theme/default/theme.less" />' );
+			document.write( '<script type="text/javascript" src="less-1.3.3.min.js"><\/script>' );
+			document.write( '<script type="text/javascript" src="../redist/docviewjs-dev-uni.js"><\/script>' );
+			document.write( '<script type="text/javascript" src="../theme/default/theme.js"><\/script>' );
+		}
+	</script>
+
+
+	<style type="text/css">
+
+	body {
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	table#tests {
+		border-collapse: collapse;
+	}
+
+	table#tests > tbody > tr:nth-of-type(2n+1) > td {
+		background-color: #DDDDDD;
+		padding: 0.5em;
+		font-weight: bold;
+	}
+
+	table#tests > tbody > tr:nth-of-type(2n+2) > td {
+		padding: 2em;
+		width: 50%;
+		border: 1px solid #DDDDDD;
+		vertical-align: middle;
+		text-align: center;
+	}
+
+	.green { color: green; }
+	body { overflow-y: auto; }
+	.greenBox { background-color: green; }
+	.greenBox:not(.hfill) { width: 50px; }
+	.greenBox:not(.vfill) { height: 50px; }
+	.greenBox.hfill { min-width: 50px; }
+	.greenBox.vfill { min-height: 50px; }
+	.blueBox { background-color: blue; }
+	.blueBox:not(.hfill) { width: 100px; }
+	.blueBox:not(.vfill) { height: 100px; }
+	.blueBox.hfill { min-width: 100px; }
+	.blueBox.vfill { min-height: 100px; }
+	.someHeight { height: 100px; }
+	.someHeight2 { height: 200px; }
+	.someWidth { width: 100px; }
+	
+	</style>
+
+</head><body class="AppView">
+
+
+<script type="text/javascript">
+
+	"use strict";
+
+	var R = new Config( {
+		str: {
+			Tooltip: 'Tooltip',
+			Label: {
+				text: 'This is a label'
+			},
+			Text: 'just some text'
+		}
+	} );
+
+
+</script>
+
+
+<div class="responsive align-center">
+	<p>
+		<h2>docviewjs unitests - default theme</h2>
+		<b>left side</b> shows live controls, <b>right side</b> shows reference images and/or behaviour description,
+		<b>browser console</b> displays errors if some unitest fails
+	</p>
+	<p><b>IE9 exceptions</b> spinner annimation doesn't work, text selection works everywhere.</p>
+</div>
+
+<table id="tests" class="responsive align-center">
+
+	<script type="template/xml" id="tTabStrip">
+		<TabStrip>
+			<Tab class="active"><Txt text="Active"/></Tab>
+			<Tab class="active" state="disabled"><Txt text="Active Disabled"/></Tab>
+			<Tab><Txt text="Inactive"/></Tab>
+			<Tab><StockImg image="eye-open"/><Txt text=" Inactive Hover"/></Tab>
+			<Label class="Tab" stock-image="eye-close" text="Inactive Disabled" state="disabled" />
+		</TabStrip>
+	</script>
+
+	<tr><td colspan="2">TabStrip</td></tr>
+	<tr>
+		<td template="tTabStrip"></td>
+		<td>Only inactive tab should have difference in hover state. Inactive tabs have pointer cursor, other tabs have default cursor. Text selection shouldn't work. Clicking on a tab should activate it (even the disabled ones).</td>
+	</tr>
+
+	<script type="template/xml" id="tViewSwitch">
+		<ViewSwitch class="align-center someWidth someHeight">
+			<View class="active greenBox" />
+			<View class="blueBox" />
+		</ViewSwitch>
+	</script>
+
+	<script type="text/javascript">
+	function tViewSwitch ( v ) {
+		setTimeout( function () {
+			v.moveView( v.getElement().lastChild._view, 'first' );
+			v.setActive( v.getElement().firstChild._view );
+			tViewSwitch( v );
+		}, 1000 );
+	}
+	</script>
+	
+	<tr><td colspan="2">ViewSwitch</td></tr>
+	<tr>
+		<td template="tViewSwitch"></td>
+		<td>Should alternate between View 1 and View 2 each second (no black border).</td>
+	</tr>
+
+	<script type="template/xml" id="tTabView">
+		<TabView>
+			<TabStrip>
+				<Tab class="active"><Txt text="Blue box"/></Tab>
+				<Tab><Txt text="Green box"/></Tab>
+			</TabStrip>
+			<ViewSwitch class="someWidth someHeight some-padding-top">
+				<View class="active blueBox" />
+				<View class="greenBox" />
+			</ViewSwitch>
+		</TabView>
+	</script>
+
+	<script type="text/javascript">
+	function tTabView ( v ) {
+		setTimeout( function () {
+			v.getElement().querySelector( 'div.Tab:not(.active)' ).firstChild.click();
+			tTabView( v );
+		}, 1000 );
+	}
+	</script>
+	
+	<tr><td colspan="2">TabView</td></tr>
+	<tr>
+		<td template="tTabView"></td>
+		<td>Should alternate between View 1 and View 2 each second (no black border). Clicking on inactive tab should display the appropriate box.</td>
+	</tr>
+
+	<script type="template/xml" id="tAccordion">
+		<Accordion>
+			<AccordionItem class="active">
+				<Label text="Active" class="AccordionItemTitle" />
+				<HtmlArea>
+					<h4>AccordionContents 1</h4>
+				</HtmlArea>
+			</AccordionItem>
+			<AccordionItem class="active" state="disabled">
+				<Label text="Active Disabled" class="AccordionItemTitle" />
+				<HtmlArea>
+					<h4>AccordionContents 2</h4>
+				</HtmlArea>
+			</AccordionItem>
+			<AccordionItem >
+				<Label text="Inactive" class="AccordionItemTitle" />
+				<HtmlArea>
+					<h4>AccordionContents 3</h4>
+				</HtmlArea>
+			</AccordionItem>
+			<AccordionItem >
+				<Label text="Inactive Hover" class="AccordionItemTitle" />
+				<HtmlArea>
+					<h4>AccordionContents 4</h4>
+				</HtmlArea>
+			</AccordionItem>
+			<AccordionItem state="disabled">
+				<Label text="Inactive Disabled" class="AccordionItemTitle" />
+				<HtmlArea>
+					<h4>AccordionContents 5</h4>
+				</HtmlArea>
+			</AccordionItem>
+		</Accordion>
+	</script>
+
+
+	<tr><td colspan="2">Accordion</td></tr>
+	<tr>
+		<td template="tAccordion"></td>
+		<td>Only inactive titles should have difference in hover state. Inactive titles have pointer cursor, other titles have default cursor. Text selection shouldn't work for the titles. Clicking on collapsed title should expand the contents while collapsing the previously expanded item, clicking again should collapse the item (even the disabled ones).</td>
+	</tr>
+
+	<script type="template/xml" id="tAccordionLive">
+		<Accordion class="someHeight2">
+			<AccordionItem class="active">
+				<Label text="Blue box" class="AccordionItemTitle" />
+				<View class="blueBox" />
+			</AccordionItem>
+			<AccordionItem>
+				<Label text="Green boxie" class="AccordionItemTitle" />
+				<View class="greenBox" />
+			</AccordionItem>
+		</Accordion>
+	</script>
+
+	<script type="text/javascript">
+	function tAccordionLive ( v ) {
+		setTimeout( function () {
+			v.getElement().querySelector( '.AccordionItem:not(.active) .AccordionItemTitle' ).firstChild.click();
+			tAccordionLive( v );
+		}, 1000 );
+	}
+	</script>
+
+
+	<tr><td colspan="2">Accordion (live)</td></tr>
+	<tr>
+		<td template="tAccordionLive"></td>
+		<td>Should alternate between View 1 and View 2 each second (no black border). Clicking on inactive title should display the appropriate box.</td>
+	</tr>
+
+	<script type="template/xml" id="tHtmlArea">
+	<HtmlArea class="text-left">
+		<h1>Header1 <small>small</small></h1>
+		<h2>Header2 <small>small</small></h2>
+		<h3>Header3 <small>small</small></h3>
+		<h4>Header4 <small>small</small></h4>
+		<h5>Header5 <small>small</small></h5>
+		<h6>Header6 <small>small</small></h6>
+		<a href="#">Link</a>
+		<a href="#">Link Hover</a>
+		<ul>
+			<li>List Item unordered</li>
+		</ul>
+		<ul class="unstyled">
+			<li>List Item unordered, unstyled</li>
+		</ul>
+		<ol>
+			<li>List Item ordered</li>
+		</ol>
+		<ol class="unstyled">
+			<li>List Item ordered unstyled</li>
+		</ol>
+	</HtmlArea>
+	</script>
+
+
+	<tr><td colspan="2">HtmlArea</td></tr>
+	<tr>
+		<td template="tHtmlArea"></td>
+		<td>Should display a text selection cursor, should be able to select text.</td>
+	</tr>
+
+
+	<script type="template/xml" id="tHtmlArea2">
+	<HtmlArea class="text-left">
+		<table class="table striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Username</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>Mark</td>
+					<td>Otto</td>
+					<td>@mdo</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>Jacob</td>
+					<td>Thornton</td>
+					<td>@fat</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>Larry</td>
+					<td>the Bird</td>
+					<td>@twitter</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table class="table bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Username</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td rowspan="2">1</td>
+					<td>Mark</td>
+					<td>Otto</td>
+					<td>@mdo</td>
+				</tr>
+				<tr>
+					<td>Mark</td>
+					<td>Otto</td>
+					<td>@TwBootstrap</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>Jacob</td>
+					<td>Thornton</td>
+					<td>@fat</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td colspan="2">Larry the Bird</td>
+					<td>@twitter</td>
+				</tr>
+			</tbody>
+		</table>
+
+
+		<table class="table hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Username</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>Mark</td>
+					<td>Otto</td>
+					<td>@mdo</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>Jacob</td>
+					<td>Thornton</td>
+					<td>@fat</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td colspan="2">Larry the Bird</td>
+					<td>@twitter</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</HtmlArea>
+	</script>
+
+
+	<tr><td colspan="2">HtmlArea2</td></tr>
+	<tr>
+		<td template="tHtmlArea2"></td>
+		<td>The third table should highlight rows on mouse over.</td>
+	</tr>
+
+
+	<script type="template/xml" id="tHtmlArea3">
+	<HtmlArea class="text-left">
+
+		<table class="table compact">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Username</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>Mark</td>
+					<td>Otto</td>
+					<td>@mdo</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>Jacob</td>
+					<td>Thornton</td>
+					<td>@fat</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td colspan="2">Larry the Bird</td>
+					<td>@twitter</td>
+				</tr>
+			</tbody>
+		</table>
+
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Product</th>
+					<th>Payment Taken</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="success">
+					<td>1</td>
+					<td>TB - Monthly</td>
+					<td>01/04/2012</td>
+					<td>Approved</td>
+				</tr>
+				<tr class="danger">
+					<td>2</td>
+					<td>TB - Monthly</td>
+					<td>02/04/2012</td>
+					<td>Declined</td>
+				</tr>
+				<tr class="warning">
+					<td>3</td>
+					<td>TB - Monthly</td>
+					<td>03/04/2012</td>
+					<td>Pending</td>
+				</tr>
+				<tr class="info">
+					<td>4</td>
+					<td>TB - Monthly</td>
+					<td>04/04/2012</td>
+					<td>Call in to confirm</td>
+				</tr>
+			</tbody>
+		</table>
+	</HtmlArea>
+	</script>
+
+
+	<tr><td colspan="2">HtmlArea3</td></tr>
+	<tr>
+		<td template="tHtmlArea3"></td>
+		<td></td>
+	</tr>
+
+
+	<script type="template/xml" id="tHtmlArea4">
+	<HtmlArea class="text-left">
+<code class="block">function nextSibling ( el ) {
+	el = el.nextSibling;
+	while ( el &amp;&amp; el.nodeType != el.ELEMENT_NODE ) {
+		el = el.nextSibling;
+	}
+	return el;
+}</code>
+
+		<pre>
+function nextSibling ( el ) {
+	el = el.nextSibling;
+	while ( el &amp;&amp; el.nodeType != el.ELEMENT_NODE ) {
+		el = el.nextSibling;
+	}
+	return el;
+}</pre>
+	</HtmlArea>
+	</script>
+
+
+	<tr><td colspan="2">HtmlArea4</td></tr>
+	<tr>
+		<td template="tHtmlArea4"></td>
+		<td></td>
+	</tr>
+
+	<script type="template/xml" id="tHtmlArea5">
+	<HtmlArea class="text-left">
+		<p>Something <code>important</code> here.</p>
+		<p>
+		<span class="label">Default</span>
+		<span class="label success">Success</span>
+		<span class="label warning">Warning</span>
+		<span class="label danger">Important</span>
+		<span class="label info">Info</span>
+		<span class="label inverse">Inverse</span>
+		</p><p>
+		<a href="" class="label">Default</a>
+		<a href="" class="label success">Success Hover</a>
+		<a href="" class="label warning">Warning</a>
+		<a href="" class="label danger">Important</a>
+		<a href="" class="label info">Info</a>
+		<a href="" class="label inverse">Inverse</a>
+		</p>
+	</HtmlArea>
+	</script>
+
+
+	<tr><td colspan="2">HtmlArea5</td></tr>
+	<tr>
+		<td template="tHtmlArea5"></td>
+		<td>Second row has darker mouse over state.</td>
+	</tr>
+
+	<script type="template/xml" id="tTxt"><Template>
+		<Txt text="{str.Text}" />
+		<Txt text=" 1 " />
+		<Txt>{str.Text}</Txt>
+		<Txt> 2</Txt>
+	</Template></script>
+
+
+	<tr><td colspan="2">Txt</td></tr>
+	<tr>
+		<td template="tTxt"></td>
+		<td>Should display default cursor, no text selection.</td>
+	</tr>
+
+	<script type="template/xml" id="tSpinner"><Template>
+		<Spinner class="small-icon" />
+		<Spinner class="medium-icon green" />
+		<Spinner class="large-icon" />
+	</Template></script>
+
+
+	<tr><td colspan="2">Spinner</td></tr>
+	<tr>
+		<td template="tSpinner"></td>
+		<td>Supposed to spin clockwise.</td>
+	</tr>
+
+
+	<script type="template/xml" id="tLabel"><Template>
+		<Label image="images/tImgSrc.png" title="{str.Tooltip}" text="{str.Label.text}" />
+		<Label order="rtl" stock-image="star" text="RTL label with stock image" />
+	</Template></script>
+
+	<tr><td colspan="2">Label</td></tr>
+	<tr>
+		<td template="tLabel"></td>
+		<td>Hover the image for tooltip. Should display default cursor, text selection is disabled.</td>
+	</tr>
+
+
+	<script type="template/xml" id="tImg"><Template>
+		<Img image="images/tImgSrc.png" text="tooltip" />
+	</Template></script>
+
+	<tr><td colspan="2">Img</td></tr>
+	<tr>
+		<td template="tImg"></td>
+		<td>Hover the image for tooltip</td>
+	</tr>
+
+
+
+
+
+	<script type="template/xml" id="tStockImg"><Template>
+		<StockImg text="{str.Tooltip}" image="star" class="small-icon" />
+		<StockImg image="star-empty" class="medium-icon" />
+		<StockImg image="star-empty" class="large-icon green" />
+	</Template></script>
+
+	<tr><td colspan="2">StockImg</td></tr>
+	<tr>
+		<td template="tStockImg"></td>
+		<td>Hover the small icon for tooltip</td>
+	</tr>
+
+
+
+	<script type="template/xml" id="tAllStockImg"><Template>
+		<% ["glass", "music", "search", "envelope", "heart", "star", "star-empty", "user",
+		"film", "th-large", "th", "th-list", "ok", "remove", "zoom-in", "zoom-out", "off",
+		"signal", "cog", "trash", "home", "file", "time", "road", "download-alt", "download",
+		"upload", "inbox", "play-circle", "repeat", "refresh", "list-alt", "lock", "flag",
+		"headphones", "volume-off", "volume-down", "volume-up", "qrcode", "barcode", "tag",
+		"tags", "book", "bookmark", "print", "camera", "font", "bold", "italic", "text-height",
+		"text-width", "align-left", "align-center", "align-right", "align-justify", "list",
+		"indent-left", "indent-right", "facetime-video", "picture", "pencil", "map-marker",
+		"adjust", "tint", "edit", "share", "check", "move", "step-backward", "fast-backward",
+		"backward", "play", "pause", "stop", "forward", "fast-forward", "step-forward",
+		"eject", "chevron-left", "chevron-right", "plus-sign", "minus-sign", "remove-sign",
+		"ok-sign", "question-sign", "info-sign", "screenshot", "remove-circle", "ok-circle",
+		"ban-circle", "arrow-left", "arrow-right", "arrow-up", "arrow-down", "share-alt",
+		"resize-full", "resize-small", "plus", "minus", "asterisk", "exclamation-sign",
+		"gift", "leaf", "fire", "eye-open", "eye-close", "warning-sign", "plane", "calendar",
+		"random", "comment", "magnet", "chevron-up", "chevron-down", "retweet", "shopping-cart",
+		"folder-close", "folder-open", "resize-vertical", "resize-horizontal", "hdd", "bullhorn",
+		"bell", "certificate", "thumbs-up", "thumbs-down", "hand-right", "hand-left", "hand-up",
+		"hand-down", "circle-arrow-right", "circle-arrow-left", "circle-arrow-up", "circle-arrow-down",
+		"globe", "wrench", "tasks", "filter", "briefcase", "fullscreen", "dashboard", "paperclip",
+		"heart-empty", "link", "phone", "pushpin", "euro", "usd", "gbp", "sort", "sort-by-alphabet",
+		"sort-by-alphabet-alt", "sort-by-order", "sort-by-order-alt", "sort-by-attributes", "sort-by-attributes-alt",
+		"unchecked", "expand", "collapse", "collapse-top"].forEach( function ( cls ) { %>
+			<StockImg image="<%= cls %>" text="<%= cls %>" class="tiny-margin" />
+		<% } ) %>
+	</Template></script>
+
+	<tr><td colspan="2">All stock images</td></tr>
+	<tr>
+		<td template="tAllStockImg"></td>
+		<td></td>
+	</tr>
+
+
+
+	<script type="template/xml" id="tLayoutVertical"><Template>
+		<View layout="Vertical">
+			<View class="greenBox" />
+			<View class="blueBox" />
+		</View>
+	</Template></script>
+
+	<tr><td colspan="2">Layout.Vertical</td></tr>
+	<tr>
+		<td template="tLayoutVertical"></td>
+		<td></td>
+	</tr>
+
+
+	<script type="template/xml" id="tLayoutVerticalHfill"><Template>
+		<View layout="Vertical">
+			<View class="greenBox hfill" />
+			<View class="blueBox hfill" />
+		</View>
+	</Template></script>
+
+	<tr><td colspan="2">Layout.Vertical - hfill</td></tr>
+	<tr>
+		<td template="tLayoutVerticalHfill"></td>
+		<td></td>
+	</tr>
+
+
+
+
+	
+	<script type="template/xml" id="tLayoutHorizontal"><Template>
+		<View layout="Horizontal">
+			<View class="greenBox" />
+			<View class="blueBox" />
+		</View>
+	</Template></script>
+
+	<tr><td colspan="2">Layout.Horizontal</td></tr>
+	<tr>
+		<td template="tLayoutHorizontal"></td>
+		<td></td>
+	</tr>
+
+
+	<script type="template/xml" id="tLayoutHorizontalVfill"><Template>
+		<View layout="Horizontal" class="someHeight">
+			<View class="greenBox vfill" />
+			<View class="blueBox vfill" />
+		</View>
+	</Template></script>
+
+	<tr><td colspan="2">Layout.Horizontal - vfill</td></tr>
+	<tr>
+		<td template="tLayoutHorizontalVfill"></td>
+		<td></td>
+	</tr>
+
+</table>
+
+<script type="text/javascript">
+	
+	Object.defineProperty( NodeList.prototype, 'forEach', { value: Array.prototype.forEach } );
+
+	function nextSibling ( el ) {
+		el = el.nextSibling;
+		while ( el && el.nodeType != el.ELEMENT_NODE ) {
+			el = el.nextSibling;
+		}
+		return el;
+	}
+
+	document.querySelectorAll( 'td[template]' ).forEach( function ( td ) {
+		setTimeout( function () {
+			var tmpl = td.getAttribute( 'template' );
+			var view = $T( tmpl, null );
+			if ( view instanceof View ) {
+				view = [view];
+			}
+			view.forEach( function ( v ) {
+				td.appendChild( v.getElement() );
+				if ( window[tmpl] instanceof Function ) {
+					window[tmpl] ( v );
+				}
+			} );
+			nextSibling( td ).insertAdjacentHTML( 'beforeend', '<p><img src="images/' + tmpl + '.png" /></p>' );
+		}, 1 );
+	} );
+
+</script>
+
+</body></html>

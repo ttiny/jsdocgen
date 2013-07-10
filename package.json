@@ -1,0 +1,22 @@
+{
+	"name": "jsdocgen",
+	"description": "API documentation generator and viewer",
+	"version": "1.0.0",
+	"author": "Borislav Peev <borislav.asdf@gmail.com>",
+	"engine": [
+		"node >= 0.10"
+	],
+	"scripts": {
+		"test": "jsdocgen test"
+	},
+	"dependencies": {
+		"Prototype": "",
+		"PathUtils": "",
+		"ArgvUtils": "",
+		"Sync": "",
+		"Markdown": ""
+	},
+	"repository": {
+		"url": ""
+	}
+}

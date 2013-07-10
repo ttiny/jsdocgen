@@ -1,0 +1,90 @@
+//
+// Labels
+// --------------------------------------------------
+
+.label {
+  display: inline;
+  padding: .25em .6em;
+  font-size: 75%;
+  font-weight: 500;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: @gray-light;
+  border-radius: .25em;
+
+}
+  // Add hover effects, but only for links
+a.label {
+  &:hover,
+  &:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    background-color: darken(@gray-light, 10%);
+  }
+}
+
+// Colors
+// Contextual variations (linked labels get darker on :hover)
+.label-danger,
+.label.danger {
+  background-color: @label-danger-bg;
+}
+a.label-danger,
+a.label.danger {
+  &:hover,
+  &:focus {
+    background-color: darken(@label-danger-bg, 10%);
+  }
+}
+
+.label-success,
+.label.success {
+  background-color: @label-success-bg;
+}
+a.label-success,
+a.label.success {
+  &:hover,
+  &:focus {
+    background-color: darken(@label-success-bg, 10%);
+  }
+}
+
+.label-warning,
+.label.warning {
+  background-color: @label-warning-bg;
+}
+a.label-warning,
+a.label.warning {
+  &:hover,
+  &:focus {
+    background-color: darken(@label-warning-bg, 10%);
+  }
+}
+
+.label-info,
+.label.info {
+  background-color: @label-info-bg;
+}
+a.label-info,
+a.label.info {
+  &:hover,
+  &:focus {
+    background-color: darken(@label-info-bg, 10%);
+  }
+}
+
+.label-inverse,
+.label.inverse {
+  background-color: @label-inverse-bg;
+}
+a.label-inverse,
+a.label.inverse {
+  &:hover,
+  &:focus {
+    background-color: darken(@label-inverse-bg, 10%);
+  }
+}
