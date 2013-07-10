@@ -13,6 +13,7 @@ Contents
 
 - [Status](#status)
 - [Very quick start](#quickstart)
+- [Authors](#authors)
 - [Usage](#usage)
   - [Writing some docs](#writingdocs)
     - [Doc comments](#doccomments)
@@ -83,6 +84,12 @@ Doc comments parsed in 1.769s
 
 Finished in 3.391s
 ```
+
+<a name="authors"></a>
+Authors
+-------
+Borislav Peev (borislav.asdf at gmail dot com)
+
 
 <a name="usage"></a>
 Usage
