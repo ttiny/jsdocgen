@@ -1,3 +1,6 @@
 [submodule "deps/docviewjs"]
 	path = deps/docviewjs
 	url = https://github.com/Perennials/docviewjs
+[submodule "deps/node_modules/Markdown"]
+	path = deps/node_modules/Markdown
+	url = https://github.com/Perennials/markdown-js
