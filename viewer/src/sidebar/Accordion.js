@@ -33,6 +33,7 @@
 
 			//todo: this is not working for methods. we should request update of this one we have the contents and docblock
 			//todo: this should also be triggered when a link is clicked inside a page
+			//todo: if there is only one item, always expand it
 			var hash = location.hash;
 			if ( hash ) {
 				for ( var i = items.length - 1; i >= 0; --i ) {
