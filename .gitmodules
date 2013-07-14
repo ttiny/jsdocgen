@@ -1,0 +1,3 @@
+[submodule "deps/docviewjs"]
+	path = deps/docviewjs
+	url = https://github.com/Perennials/docviewjs
