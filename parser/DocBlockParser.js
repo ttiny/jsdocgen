@@ -4,6 +4,7 @@ require( 'Prototype' );
 var Path = require( 'path' );
 var Fs = require( 'fs' );
 var Markdown = require( 'Markdown' ).Markdown;
+var Highlight = require( 'highlight.js' );
 
 /**
  * Collection of function for parsing doc blocks and converting them to JSON for the doc viewer.
@@ -14,6 +15,26 @@ var Markdown = require( 'Markdown' ).Markdown;
 //todo: /***/ wouldnt work for languages with different comments, this thing has no place here
 
 function DocBlockParser () {
+	this._markdownOptions = {
+		codeDefaultLang: this.getLanguage(),
+		codeBlockClass: 'block',
+		codeBlockCallback: function ( code, lang, deflang ) {
+			if ( !lang ) {
+				lang = deflang;
+			}
+			if ( lang ) {
+				if ( lang == 'auto' ) {
+					return Highlight.highlightAuto( code ).value;
+				}
+				else {
+					return Highlight.highlight( lang, code ).value;
+				}
+			}
+			else {
+				return code;
+			}
+		}
+	};
 }
 
 var _reNormalizeWhiteSpace = /\r\n|\r/g;
@@ -232,7 +253,7 @@ DocBlockParser.define( {
 	@return string
 	*/
 	parseDescription: function ( text ) {
-		return Markdown.toHtml( text );
+		return Markdown.toHtml( text, this._markdownOptions );
 	}
 
 } );

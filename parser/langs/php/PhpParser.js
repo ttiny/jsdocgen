@@ -12,8 +12,8 @@ var PathUtils = require( 'PathUtils' );
 var Re = require( './RegExes.js' );
 
 function PhpParser ( argv ) {
-	argv = argv || {}
 	DocBlockParser.call( this );
+	argv = argv || {}
 	this._defaultPackage = argv.defaultpackage || '<default>';
 	this._autoInherit = argv.autoinherit;
 	this._autoNotices = argv.autonotices;
@@ -36,6 +36,10 @@ var _reBackSlash = /\\/g;
 var _reAnySlash = /[\\\/:]/g;
 
 PhpParser.extend( DocBlockParser, {
+
+	getLanguage: function () {
+		return 'php';
+	},
 
 	getFactorySymbols: function ( callback ) {
 		ChildProcess.execFile(

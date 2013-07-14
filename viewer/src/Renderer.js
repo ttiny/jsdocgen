@@ -338,7 +338,7 @@
 			html += meta( docblock );
 			this.setHtml( html );
 
-			var el = this.getElement();
+			/*var el = this.getElement();
 			var codes = el.querySelectorAll( 'code:not(.inline):not(.prettyprinted)' );
 			for ( var i = codes.length - 1; i >= 0; --i ) {
 				var code = codes[i];
@@ -355,7 +355,7 @@
 
 			if ( window.prettyPrint ) {
 				prettyPrint();
-			}
+			}*/
 		}
 	} );
 
