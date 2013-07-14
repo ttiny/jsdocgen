@@ -24,19 +24,22 @@ function DocBlockParser () {
 			}
 			if ( lang ) {
 				if ( lang == 'auto' ) {
-					return Highlight.highlightAuto( code ).value;
+					code = Highlight.highlightAuto( code ).value;
 				}
 				else {
-					return Highlight.highlight( lang, code ).value;
+					code = Highlight.highlight( lang, code ).value;
 				}
 			}
-			else {
-				return code;
-			}
+			return code;
+		},
+		codeCallback: function ( code ) {
+			//escape @ symbol so we won't get false inline tags in code
+			return code.replace( RE_AT, '&#64;' );
 		}
 	};
 }
 
+var RE_AT = /@/g;
 var _reNormalizeWhiteSpace = /\r\n|\r/g;
 var _reTrimDocBlock = /\/\*\*\s*([\s\S]*?)\*\//gm;
 var _reDocBlockStarPrefix = /^[\t ]*\* ?/gm;

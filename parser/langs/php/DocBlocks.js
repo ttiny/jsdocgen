@@ -871,48 +871,51 @@ module.exports = {
 	parseDescription: function ( text, block ) {
 		var that = this;
 		var index = this._index;
-		
-		//parse {@see}
-		text = text.replace( _reSee, function ( m, m1 ) {
-			try {
-				return '{@see ' + that.parseSeeTag( m1, block ).url + '}';
-			}
-			catch ( e ) {
-				return m1;
-			}
-		} );
-
-		//auto see
-		if ( this._autoSee ) {
-			text = text.replace( Re.autoSee, function ( m, m1, m2, m3 ) {
-				//m1 matches see tags, so we don't interfere with them
-				if ( m1 ) {
-					return m;
+		this._markdownOptions.noCodeCallback = function ( text ) {
+			//parse {@see}
+			text = text.replace( _reSee, function ( m, m1 ) {
+				try {
+					return '{@see ' + that.parseSeeTag( m1, block ).url + '}';
 				}
-				//we have whitespace in some regexes
-				var add = '';
-				var mm = m2 || m3;
-				if ( mm ) {
-					add = ' ';
+				catch ( e ) {
+					return m1;
 				}
-				else {
-					mm = m;
-				}
-				var ret = that.parseSeeTag( mm, block, true, true );
-				if ( !ret || ret.block === block ) {
-					return m;
-				}
-				if ( that._autoNotices ) {
-					console.log( '\nAUTO NOTICE:' );
-					console.log( 
-						'Found a symbol reference "' + mm + '"' +
-						'\n  for element ' + DocBlockParser.formatElement( block ) +
-						'\n  in file ' + DocBlockParser.formatFile( block ) );
-				}
-				return add + '{@see ' + ret.url + '}';
 			} );
-		}
 
-		return DocBlockParser.prototype.parseDescription.call( this, text );
+			//auto see
+			if ( this._autoSee ) {
+				text = text.replace( Re.autoSee, function ( m, m1, m2, m3 ) {
+					//m1 matches see tags, so we don't interfere with them
+					if ( m1 ) {
+						return m;
+					}
+					//we have whitespace in some regexes
+					var add = '';
+					var mm = m2 || m3;
+					if ( mm ) {
+						add = ' ';
+					}
+					else {
+						mm = m;
+					}
+					var ret = that.parseSeeTag( mm, block, true, true );
+					if ( !ret || ret.block === block ) {
+						return m;
+					}
+					if ( that._autoNotices ) {
+						console.log( '\nAUTO NOTICE:' );
+						console.log( 
+							'Found a symbol reference "' + mm + '"' +
+							'\n  for element ' + DocBlockParser.formatElement( block ) +
+							'\n  in file ' + DocBlockParser.formatFile( block ) );
+					}
+					return add + '{@see ' + ret.url + '}';
+				} );
+			}
+			return text;
+		};
+		text = DocBlockParser.prototype.parseDescription.call( this, text );
+		this._markdownOptions.noCodeCallback = null;
+		return text;
 	}
 };
