@@ -5,7 +5,7 @@
 	// this is the table of contents, it is loaded for each class
 	function Contents () {
 		View.HtmlArea.call( this );
-		this.setBehaviour( 'auto' );
+		this.setBehavior( 'auto' );
 		this._lang = null;
 	}
 

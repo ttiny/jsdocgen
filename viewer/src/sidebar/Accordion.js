@@ -5,7 +5,7 @@
 	// this view is used in namespaces and packages, it loads their contents the first time it is activated
 	function Accordion () {
 		View.Accordion.call( this );
-		this.setBehaviour( 'auto' );
+		this.setBehavior( 'auto' );
 		this._lang = null;
 		this._index = null;
 
@@ -33,13 +33,17 @@
 
 			//todo: this is not working for methods. we should request update of this one we have the contents and docblock
 			//todo: this should also be triggered when a link is clicked inside a page
-			//todo: if there is only one item, always expand it
-			var hash = location.hash;
-			if ( hash ) {
-				for ( var i = items.length - 1; i >= 0; --i ) {
-					if ( accordion.findSymbol( hash, i ) ) {
-						accordion.setActive( items[i] );
-						break;
+			/*if ( items.length == 1 ) {
+				accordion.setActive( items[0] );
+			}
+			else*/ if ( items.length > 0 ) {
+				var hash = location.hash;
+				if ( hash ) {
+					for ( var i = items.length - 1; i >= 0; --i ) {
+						if ( accordion.findSymbol( hash, i ) ) {
+							accordion.setActive( items[i] );
+							break;
+						}
 					}
 				}
 			}

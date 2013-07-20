@@ -256,7 +256,7 @@ DocBlockParser.define( {
 	@return string
 	*/
 	parseDescription: function ( text ) {
-		return Markdown.toHtml( text, this._markdownOptions );
+		return Markdown( text, this._markdownOptions ).html;
 	}
 
 } );

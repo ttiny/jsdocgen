@@ -1,3 +1,11 @@
+
+
+var defs = {};
+defs.JSDOCGEN_VERSION = '0.9dev';
+
+
+
+
 var Fs = require( 'fs' );
 var Build = require( '../deps/docviewjs/build/Build.js' );
 var ArgvUtils = require( 'ArgvUtils' );
@@ -10,7 +18,7 @@ var DIR_SRC = __dirname + '/src';
 
 var argv = ArgvUtils.parseArgs();
 
-var defs = {};
+
 if ( argv.def ) {
 	if ( !(argv.def instanceof Array) ) {
 		argv.def = [ argv.def ];
@@ -25,7 +33,6 @@ defs.JSDOCGEN_LOCATION = defs.JSDOCGEN_LOCATION || '';
 defs.JSDOCGEN_DOCS = argv.docslocation || 'docs/';
 defs.JSDOCGEN_LANG = argv.lang;
 defs.JSDOCGEN_DEV_LOCATION = '';
-defs.JSDOCGEN_VERSION = '0.8';
 
 var outdir = argv.outdir || DIR_REDIST;
 
