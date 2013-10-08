@@ -6,6 +6,7 @@ API documentation generator and viewer.
 - Generates the documentation quickly, a library of ~200 PHP files takes ~3 seconds on a below average laptop.
 - Designed with support of several languages in mind.
 - Markdown support, no ugly XML/HTML in the docs.
+- Each method/property/function is displayed on a separate page, not in a single page for the class.
 - Decent looking GUI, unmixed with the docs themselves.
 - No external dependencies to install.
 
