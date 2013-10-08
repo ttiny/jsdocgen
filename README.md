@@ -2,6 +2,13 @@ jsdocgen
 ========
 API documentation generator and viewer.
 
+**Features:**
+- Generates the documentation quickly, a library of ~200 PHP files takes ~3 seconds on a below average laptop.
+- Designed with support of several languages in mind.
+- Markdown support, no ugly XML/HTML in the docs.
+- Decent looking GUI, unmixed with the docs themselves.
+- No external dependencies to install.
+
 
 Demo
 ----
@@ -13,7 +20,6 @@ Contents
 
 - [Status](#status)
 - [Very quick start](#quickstart)
-- [Authors](#authors)
 - [Usage](#usage)
   - [Writing some docs](#writingdocs)
     - [Doc comments](#doccomments)
@@ -26,6 +32,7 @@ Contents
      - [Building the front end](#buildfrontend)
 - [Using the parser](#parser)
   - [PHP specific options](#php-parser)
+- [Authors](#authors)
 
 <a name="status"></a>
 Status
@@ -85,12 +92,6 @@ Doc comments parsed in 1.769s
 Finished in 3.391s
 ```
 
-<a name="authors"></a>
-Authors
--------
-Borislav Peev (borislav.asdf at gmail dot com)
-
-
 <a name="usage"></a>
 Usage
 =====
@@ -111,6 +112,9 @@ Actually the project started because PHPDocumentor couldn't serve my needs any m
 If you already have documentation in PHPDocumentor format it will mostly work without changes.
 There are minor differences that can be changed with few simple "replace in files" commands.
 That doesn't mean jsdocgen strives for compatibility, but it is based on what I was familiar with.
+Unlike other popular documentation systems, the descriptions of jsdocgen are in markdown format,
+making them easier to read and write (in contrast to using HTML/XML) and suitable for formatting
+large volumes of text.
 
 <a name="doccomments"></a>
 ### Doc comments
@@ -540,3 +544,8 @@ elements will not be included. These files may be scripts as they will not be
 included by the PHP parser as the rest of the sources, only read as plain text and their
 first comment extracted.
 
+
+<a name="authors"></a>
+Authors
+-------
+Borislav Peev (borislav.asdf at gmail dot com)
