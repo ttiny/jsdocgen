@@ -272,10 +272,10 @@ Can appear in the context of functions and methods. Indicates the function accep
 variable number of arguments.
 
 `@var <type> [description]`  
-Can appear in the context of a property or method to describe the type of this
+Can appear in the context of a property to describe the type of this
 property. 'type' is the same as in `@param`. If this tag appears and it has
-description, but there is no summary, the description will be put in the place
-of the summary.
+description, but there is no doc comment summary, the description of the tag
+will be put in the place of the doc comment summary.
 
 
 <a name="generating"></a>
