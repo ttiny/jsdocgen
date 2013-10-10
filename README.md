@@ -292,10 +292,10 @@ many times while you work and change them.
 ### Parsing the sources
 Before starting the parser it is important to understand how it works.
 It uses PHP's built in reflection capabilities, so to
-parse the sources it actually includes them in a PHP script. This
-means it can only parse libraries. If you attempt to parse scripts
-that perform actions, not just declare classes, these scripts
-will actually be executed and may do something unwanted.
+parse the sources it actually includes them in a PHP script. The downside
+of this approach is it can only parse libraries. On the upside it is fast.
+If you attempt to parse scripts that perform actions, not just declare classes,
+these scripts will actually be executed and may do something unwanted.
 
 Before executing any scripts, the parser will define a constant
 named `JSDOCGEN_PHP_PARSER`, so if you need to tweak your sources
@@ -335,10 +335,10 @@ The important option that you will most likely need to include a setup script is
 to the location of your setup script. This setup can boot your autoloader or just include some files
 so there won't be any undefined classes when your sources are included.
 
-TravelSDK Core is not using special init script for the docs at all,
+The "TravelSDK Core" from the demo section is not using special init script for the docs at all,
 it is directly including its own init script from the command line.
-The init script for phptestr demo project above looks like this, one line and nothing scary,
-and actually it can also be skipped, but I'm leaving it as demonstration.
+But if it was to use init script for the documentation it would
+look like this - just a single line to include the autoloader of the library:
 ```php
 <?
 
