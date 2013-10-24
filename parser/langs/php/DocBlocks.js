@@ -643,6 +643,15 @@ module.exports = {
 			}
 		} );
 
+		if ( tags.throws !== undefined ) {
+			var list = tags.throws;
+			for ( var i = list.length - 1; i >= 0; --i ) {
+				if ( String.isString( list[i].description ) && list[i].description.length > 0 ) {
+					list[i].description = this.parseDescription( list[i].description, block );
+				}
+			}
+		}
+
 		if ( tags.see ) {
 			var see = tags.see;
 			for ( var i = see.length - 1; i >= 0; --i ) {
