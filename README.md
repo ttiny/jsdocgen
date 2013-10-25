@@ -10,6 +10,9 @@ API documentation generator and viewer.
 - Decent looking GUI, unmixed with the docs themselves.
 - No external dependencies to install.
 
+*__Warning: GitHub's zip files are broken and ignore some files from the repository.
+You can either do full checkout (with submodules) or I will upload a proper zip file
+soon when I have some spare time.__*
 
 Demo
 ----
