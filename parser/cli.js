@@ -4,6 +4,7 @@ var PathUtils = require( 'PathUtils' );
 var ArgvUtils = require( 'ArgvUtils' );
 var DocBlockParser = require( './DocBlockParser.js' );
 var Path = require( 'path' );
+var Debug = require( './Debug.js' );
 
 function main ( argv ) {
 	var usage = 
@@ -39,12 +40,13 @@ function main ( argv ) {
 	}
 
 	process.stdout.write( '\nLooking for sources... ' );
-	var t = Date.now();
+	
+	Debug.startTimer();
 	process.stdout.write( '\n  ' + Path.normalize( argv.projectdir ) + ' ' + argv.pattern + ' ... ' );
 
 	var sources = PathUtils.listPath( argv.projectdir, argv.pattern, PathUtils.LIST_DEFAULT | PathUtils.LIST_FULL_PATH ) || [];
 
-	process.stdout.write( ( ( Date.now() - t ) / 1000 ) + 's' );
+	process.stdout.write( Debug.endTimer() + 's' );
 
 	if ( sources.length == 0 ) {
 		console.error( 'Error: No sources matching the specified pattern were found.' );

@@ -1,1 +1,0 @@
-Set of classes which can be reused in implementing language parsers for object oriented languages similar to PHP (which was the first implemented language).
