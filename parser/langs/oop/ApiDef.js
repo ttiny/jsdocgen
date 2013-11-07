@@ -4,12 +4,12 @@
 @def class ApiDef
 @author Borislav Peev <borislav.asdf@gmail.com>
 */
-function ApiDef () {
-
+function ApiDef ( type ) {
+	this.type = type;
 }
 
 ApiDef.defineStatic( {
-	fromString: function ( parser, def ) {
+	fromString: function ( parser, docblock, def ) {
 		return null;
 	}
 } );

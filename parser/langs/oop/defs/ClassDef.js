@@ -1,19 +1,35 @@
 "use strict";
 
 var ApiDef = require( '../ApiDef.js' );
+var Re = require( '../RegExes.js' );
 
 /**
 @def class ClassDef extends ApiDef
 @author Borislav Peev <borislav.asdf@gmail.com>
 */
-function ClassDef () {
-	ApiDef.call( this );
+function ClassDef ( attr, name, _extends, _implements, uses ) {
+	ApiDef.call( this, 'class' );
+	this.attr = attr;
+	this.name = name;
+	this.extends = _extends;
+	this.implements = _implements;
+	this.uses = uses;
 }
 
 ClassDef.extend( ApiDef );
 
 ClassDef.defineStatic( {
-	fromString: function ( parser, def ) {
+	fromString: function ( parser, docblock, def ) {
+		var cls = def.match( Re.class );
+		if ( cls ) {
+			return new ClassDef(
+				cls[1],
+				cls[2],
+				cls[3],
+				cls[4],
+				cls[5]
+			);
+		}
 		return null;
 	}
 } );

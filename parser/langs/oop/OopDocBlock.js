@@ -2,6 +2,7 @@
 
 var DocBlock = require( './DocBlock.js' );
 var ApiDef = require( './ApiDef.js' );
+var DocBlockParser = require( '../../DocBlockParser.js' );
 
 /**
 {@see DocBlock} that supports wide variety of OOP features in use by many languages.
@@ -105,127 +106,16 @@ function OopDocBlock ( parser, docblock ) {
 		delete tags.declared;
 	}
 
-	
-
-	if ( tags.file !== undefined && this._projectDir ) {
-		tags.file.name = Path.relative( this._projectDir, tags.file.name ).replace( _reBackSlash, '/' );
+	if ( tags.file !== undefined && parser._projectDir ) {
+		tags.file.name = Path.relative( parser._projectDir, tags.file.name ).replace( _reBackSlash, '/' );
 	}
 
 	for ( var key in OopDocBlock.Defs ) {
-		var def = OopDocBlock.Defs[key].fromString( this, this.def );
+		var def = OopDocBlock.Defs[key].fromString( parser, this, this.def );
 		if ( def instanceof ApiDef ) {
 			this.def = def;
 			return /*this*/;
 		}
-	}
-
-	var def = this.def;
-
-	//todo: move these stuffs into the files with the defs
-	var method = def.match( Re.method );
-	if ( method !== null ) {
-		this.def = {
-			type: 'method',
-			access: method[1],
-			attr: method[2],
-			static: method[3],
-			return: { vartype: method[4],  byref: method[5] ? true : false },
-			class: method[6],
-			name: method[7],
-			args: method[8],
-			vaarg: tags.vaarg,
-			declared: declared
-		};
-		return /*this*/;
-	}
-
-	var cls = def.match( Re.class );
-	if ( cls !== null ) {
-	 	this.def = {
-			type: 'class',
-			attr: cls[1],
-			name: cls[2],
-			extends: cls[3],
-			implements: cls[4],
-			uses: cls[5]
-		};
-		return /*this*/;
-	}
-
-	var iface = def.match( Re.interface );
-	if ( iface !== null ) {
-	 	this.def = {
-			type: 'interface',
-			name: iface[1],
-			implements: iface[2]
-		};
-		return /*this*/;
-	}
-
-	var trait = def.match( Re.trait );
-	if ( trait !== null ) {
-	 	this.def = {
-			type: 'trait',
-			name: trait[1],
-			uses: trait[2]
-		};
-		return /*this*/;
-	}
-
-	var prop = def.match( Re.property );
-	if ( prop !== null ) {
-	 	this.def = {
-			type: 'var',
-			access: prop[1],
-			attr: prop[2],
-			static: prop[3],
-			class: prop[4],
-			name: prop[5],
-			vartype: prop[6],
-			value: prop[7],
-			declared: declared
-		};
-		return /*this*/;
-	}
-
-	var constant = def.match( Re.const );
-	if ( constant !== null ) {
-	 	this.def = {
-			type: 'const',
-			class: constant[1],
-			name: constant[2],
-			vartype: constant[3],
-			value: constant[4],
-			declared: declared
-		};
-		return /*this*/;
-	}
-	
-	var func = def.match( Re.function );
-	if ( func !== null ) {
-		this.def = {
-			type: 'function',
-			access: func[1],
-			attr: func[2],
-			static: func[3],
-			return: { vartype: func[4], byref: func[5] ? true : false },
-			name: func[6],
-			args: func[7],
-			vaarg: tags.vaarg
-		};
-		return /*this*/;
-	}
-
-	var file = def.match( Re.file );
-	if ( file !== null ) {
-		this.def = {
-			type: 'file',
-			name: (this._projectDir ? Path.relative( this._projectDir, file[1] ) : file[1]).replace( _reBackSlash, '/' )
-		};
-		if ( tags.package === undefined ) {
-			tags.package = this._defaultPackage;
-		}
-		return /*this*/;
 	}
 
 	throw new DocBlockParser.Error( this, 'Unable to parse @def tag', docblock );

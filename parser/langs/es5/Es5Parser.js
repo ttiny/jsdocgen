@@ -113,8 +113,8 @@ Es5Parser.define( {
 					var start = data.substr( 0, m.index ).count( '\n' ) + 1;
 					var end = start + block.count( '\n' );
 					block = OopDocBlock.sanitizeDocBlock( block );
-					block += '\n@def file ' + fn + ':' + start + '-' + end;
-					blocks.push( new OopDocBlock( this, block ) );
+					block += '\n@file ' + fn + ':' + start + '-' + end;
+					blocks.push( new OopDocBlock( that, block ) );
 				}
 				++goodsources;
 				wait.notify();
