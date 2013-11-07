@@ -4,31 +4,33 @@ require( 'Unitest' );
 // export the regexps for tests.js
 // these regexes are used to parse the @def tags of doc comments
 var Re = {};
-Re.strAccess 		= '(?:(public|private|protected)\\s+)',
-Re.strFinal 		= '(?:(final)\\s+)',
-Re.strAbstractFin 	= '(?:(final|abstract)\\s+)',
-Re.strStatic 		= '(?:(static)\\s+)',
-Re.strReturnType 	= '(?:((?:[A-Za-z_\\$]+[A-Za-z0-9_\\$]*)(?:\\.[A-Za-z_\\$]+[A-Za-z0-9_\\$]*)*)\\s+)',
-Re.strClassPrefix 	= '(?:((?:[A-Za-z_\\$]+[A-Za-z0-9_\\$]*)(?:\\.[A-Za-z_\\$]+[A-Za-z0-9_\\$]*)*)\\.)',
-Re.strFullName 		= function(nc,ns){ return '('+(!nc?'?:':'')+'(?:[A-Za-z_\\$]+[A-Za-z0-9_\\$]'+(ns?'+':'*')+')(?:\\.[A-Za-z_\\$]+[A-Za-z0-9_\\$]*)'+(ns?'+':'*')+')'; },
-Re.strShortName 	= function(nc){ return '('+(!nc?'?:':'')+'[A-Za-z_\\$]+[A-Za-z0-9_\\$]*)'; },
-Re.strString 		= function(nc){ return '"('+(!nc?'?:':'')+'[^"\\\\]*(?:\\\\.[^"\\\\]*)*)"'; },
-Re.strFileName		= '(?:[\\s^]([^\\s\\\\/:\\*\\?<>\\|"]+(?:/[^\\s\\\\/:\\*\\?<>\\|"]+)*\\.php)[\\s$])',
+Re.strAccess 		= '(?:(public|private|protected)\\s+)'
+Re.strFinal 		= '(?:(final)\\s+)'
+Re.strAbstractFin 	= '(?:(final|abstract)\\s+)'
+Re.strStatic 		= '(?:(static)\\s+)'
+Re.strFullName 		= function(nc,ns){ return '('+(!nc?'?:':'')+'\\.?(?:[A-Za-z_\\$]+[A-Za-z0-9_\\$]'+(ns?'+':'*')+')(?:\\.[A-Za-z_\\$]+[A-Za-z0-9_\\$]*)'+(ns?'+':'*')+')'; }
+Re.strClassPrefix 	= '(?:('+Re.strFullName(0)+')\\.)'
+Re.strVarType		= function(nc){ return '('+(!nc?'?:':'')+Re.strFullName(0)+'(?:\\[\\])?(?:\\|'+Re.strFullName(0)+'(?:\\[\\])?)*)'; };
+Re.strReturnType 	= '(?:('+Re.strVarType(0)+')\\s+)'
+Re.strShortName 	= function(nc){ return '('+(!nc?'?:':'')+'[A-Za-z_\\$]+[A-Za-z0-9_\\$]*)'; }
+Re.strString 		= function(nc){ return '"('+(!nc?'?:':'')+'[^"\\\\]*(?:\\\\.[^"\\\\]*)*)"'; }
+Re.strFileName		= '(?:[\\s^]([^\\s\\\\/:\\*\\?<>\\|"]+(?:/[^\\s\\\\/:\\*\\?<>\\|"]+)*\\.php)[\\s$])'
 Re.strUrl 			= '[\\s^]((?:http|https)://[^\\s$]+)'
 
-Re.strVarDef		= function(nc){ return Re.strShortName(nc)+'(?:\\s*:\\s*'+Re.strFullName(nc)+')?(?:\\s*=\\s*'+Re.strString(nc)+')?'; },
-Re.strFunArgument 	= function(nc){ return '&?\\$'+Re.strVarDef(nc); },
-Re.strFunArgument2 	= function(nc,optcomma){ return '(?:\\s*,'+(optcomma?'?':'')+'\\s*'+Re.strFunArgument(nc)+')'; },
-Re.strFunArguments	= function(nc){ return '\\(\\s*('+(!nc?'?:':'')+Re.strFunArgument(0)+Re.strFunArgument2(0)+'*)?\\s*(\\.\\.\\.)\\s*\\)'; },
-Re.strMethod 		= Re.strAccess+'?'+Re.strAbstractFin+'?'+Re.strStatic+'?'+Re.strReturnType+'?function\\s*(&)?'+Re.strClassPrefix+Re.strShortName(1)+'\\s*'+Re.strFunArguments(1),
-Re.strFunction 		= Re.strAccess+'?'+Re.strAbstractFin+'?'+Re.strStatic+'?'+Re.strReturnType+'?(?:function)\\s*(&)?'+Re.strFullName(1)+'\\s*'+Re.strFunArguments(1)
-Re.strClassList 	= '('+Re.strFullName(0)+'(?:\\s*,\\s*'+Re.strFullName(0)+')*)';
-Re.strClass 		= Re.strAbstractFin+'?class\\s*'+Re.strFullName(1)+'(?:\\s*extends\\s*'+Re.strFullName(1)+')?'+'(?:\\s*implements\\s*'+Re.strClassList+')?'+'(?:\\s*uses\\s*'+Re.strClassList+')?';
-Re.strInterface 	= 'interface\\s*'+Re.strFullName(1)+'(?:\\s*implements\\s*'+Re.strClassList+')?';
-Re.strTrait 		= 'trait\\s*'+Re.strFullName(1)+'(?:\\s*uses\\s*'+Re.strClassList+')?';
-Re.strClassConst 	= 'const\\s*'+Re.strClassPrefix+Re.strVarDef(1);
-Re.strClassVar 		= Re.strAccess+'?'+Re.strFinal+'?'+Re.strStatic+'?var\\s*'+Re.strClassPrefix+'\\$'+Re.strVarDef(1);
-Re.strFile 			= 'file (.+)';
+Re.strVarDef		= function(nc){ return Re.strShortName(nc)+'(?:\\s*:\\s*'+Re.strVarType(nc)+')?(?:\\s*=\\s*'+Re.strString(nc)+')?'; }
+Re.strFunArgument 	= function(nc){ return '&?'+Re.strVarDef(nc); }
+Re.strFunArgument2 	= function(nc,optcomma){ return '(?:\\s*,'+(optcomma?'?':'')+'\\s*'+Re.strFunArgument(nc)+')'; }
+Re.strFunArguments	= function(nc){ return '\\(\\s*('+(!nc?'?:':'')+Re.strFunArgument(0)+Re.strFunArgument2(0)+'*)?\\s*(?:,?\\s*(\\.\\.\\.))?\\s*\\)'; }
+Re.strMethod 		= Re.strAccess+'?'+Re.strAbstractFin+'?'+Re.strStatic+'?'+Re.strReturnType+'?function\\s*(&)?'+Re.strClassPrefix+Re.strShortName(1)+'\\s*'+Re.strFunArguments(1)
+Re.strFunction 		= Re.strAccess+'?'+Re.strAbstractFin+'?'+Re.strStatic+'?'+Re.strReturnType+'?function\\s*(&)?'+Re.strShortName(1)+'\\s*'+Re.strFunArguments(1)
+Re.strCallback 		= Re.strAccess+'?'+Re.strAbstractFin+'?'+Re.strStatic+'?'+Re.strReturnType+'?callback\\s*(&)?'+Re.strFullName(1)+'\\s*'+Re.strFunArguments(1)
+Re.strClassList 	= '('+Re.strFullName(0)+'(?:\\s*,\\s*'+Re.strFullName(0)+')*)'
+Re.strClass 		= Re.strAbstractFin+'?class\\s*'+Re.strFullName(1)+'(?:\\s*extends\\s*'+Re.strFullName(1)+')?'+'(?:\\s*implements\\s*'+Re.strClassList+')?'+'(?:\\s*uses\\s*'+Re.strClassList+')?'
+Re.strInterface 	= 'interface\\s*'+Re.strFullName(1)+'(?:\\s*implements\\s*'+Re.strClassList+')?'
+Re.strTrait 		= 'trait\\s*'+Re.strFullName(1)+'(?:\\s*uses\\s*'+Re.strClassList+')?'
+Re.strClassConst 	= 'const\\s*'+Re.strClassPrefix+Re.strVarDef(1)
+Re.strClassVar 		= Re.strAccess+'?'+Re.strFinal+'?'+Re.strStatic+'?var\\s*'+Re.strClassPrefix+Re.strVarDef(1)
+Re.strFile 			= 'file (.+)'
 
 Re.file 			= new RegExp( '^' + Re.strFile + '$' );
 Re.method 			= new RegExp( '^' + Re.strMethod + '$' );
@@ -38,10 +40,13 @@ Re.const 			= new RegExp( '^' + Re.strClassConst + '$' );
 Re.class 			= new RegExp( '^' + Re.strClass + '$' );
 Re.interface 		= new RegExp( '^' + Re.strInterface + '$' );
 Re.trait 			= new RegExp( '^' + Re.strTrait + '$' );
-Re.autoSee			= new RegExp( '(\\{@see [^\\}]*)?(?:(?:'+Re.strFullName(0)+'.'+Re.strShortName(0)+'(?:\\(\\))?)|(?:'+Re.strFullName(0)+'\\(\\))|(?:'+Re.strFullName(0,1)+')|'+Re.strFileName+'|'+Re.strUrl+')', 'gm' );
+Re.autoSee			= new RegExp( '(\\{@see [^\\}]*)?(?:(?:'+Re.strFullName(0)+'\\.'+Re.strShortName(0)+'(?:\\(\\))?)|(?:'+Re.strFullName(0)+'\\(\\))|(?:'+Re.strFullName(0,1)+')|'+Re.strFileName+'|'+Re.strUrl+')', 'gm' );
 
 
 Unitest( 'OOP RegExes', function () {
+
+	test( 'static function Boolean.isBoolean ( boolean )'.match( Re.method )[0] == 'static function Boolean.isBoolean ( boolean )' );
+
 	//test regular expressions
 	var re = new RegExp( '^' + Re.strFullName(1) );
 	test( 'asdQWE_123'.match( re )[0] == 'asdQWE_123' );
@@ -57,16 +62,16 @@ Unitest( 'OOP RegExes', function () {
 	test( !'"as\\\"d\\\"'.match( re ) );
 
 	var re = new RegExp( '^' + Re.strFunArgument(1) );
-	test( '&$asd:Exception.asd = "qwe"'.match( re )[0] = '&$asd:Exception.asd = "qwe"' );
+	test( '&$asd:Exception.asd = "qwe"'.match( re )[0] == '&$asd:Exception.asd = "qwe"' );
 	test( '$asd = "qwe"'.match( re )[0] == '$asd = "qwe"' );
 	test( '&$asd:array'.match( re )[0] == '&$asd:array' );
 	test( '&$asd = "5"'.match( re )[0] == '&$asd = "5"' );
 	test( '$asd'.match( re )[0] == '$asd' );
 	test( '&$asd'.match( re )[0] == '&$asd' );
-	test( !'asd'.match( re ) );
+	//test( !'asd'.match( re ) );
 
 	var re = new RegExp( '^' + Re.strFunArguments(1) );
-	test( '( &$asd:Exceptionasd = "qwe" )'.match( re )[0] == '( &$asd:Exception.asd = "qwe" )' );
+	test( '( &$asd:Exception.asd = "qwe" )'.match( re )[0] == '( &$asd:Exception.asd = "qwe" )' );
 	test( '( &$asd:Exception.asd = "qwe", $qwe, &$zxc = "5", $poi:array )'.match( re )[0] == '( &$asd:Exception.asd = "qwe", $qwe, &$zxc = "5", $poi:array )' );
 
 	var re = Re.class;

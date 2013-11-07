@@ -1,5 +1,7 @@
 "use strict";
 
+require( 'Prototype' );
+
 /**
 @def class ApiDef
 @author Borislav Peev <borislav.asdf@gmail.com>

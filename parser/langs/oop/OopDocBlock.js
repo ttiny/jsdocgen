@@ -152,6 +152,7 @@ OopDocBlock.defineStatic( {
 
 	Defs: {
 		'method': require( './defs/MethodDef.js' ),
+		'callback': require( './defs/CallbackDef.js' ),
 		'class': require( './defs/ClassDef.js' ),
 		'interface': require( './defs/InterfaceDef.js' ),
 		'trait': require( './defs/TraitDef.js' ),
