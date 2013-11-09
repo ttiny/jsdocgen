@@ -1,7 +1,6 @@
 "use strict";
 
 var ApiDef = require( '../ApiDef.js' );
-var Re = require( '../RegExes.js' );
 
 /**
 @def class ClassDef extends ApiDef
@@ -20,6 +19,7 @@ ClassDef.extend( ApiDef );
 
 ClassDef.defineStatic( {
 	fromString: function ( parser, docblock, def ) {
+		var Re = parser.getRegexProvider();
 		var cls = def.match( Re.class );
 		if ( cls ) {
 			return new ClassDef(

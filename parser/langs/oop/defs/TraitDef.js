@@ -1,7 +1,6 @@
 "use strict";
 
 var ApiDef = require( '../ApiDef.js' );
-var Re = require( '../RegExes.js' );
 
 /**
 @def class TraitDef extends ApiDef
@@ -17,6 +16,7 @@ TraitDef.extend( ApiDef );
 
 TraitDef.defineStatic( {
 	fromString: function ( parser, docblock, def ) {
+		var Re = parser.getRegexProvider();
 		var trait = def.match( Re.trait );
 		if ( trait !== null ) {
 		 	return new TraitDef(

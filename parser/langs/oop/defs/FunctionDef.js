@@ -1,7 +1,6 @@
 "use strict";
 
 var ApiDef = require( '../ApiDef.js' );
-var Re = require( '../RegExes.js' );
 var VarType = require( './VarType.js' );
 
 /**
@@ -23,6 +22,7 @@ FunctionDef.extend( ApiDef );
 
 FunctionDef.defineStatic( {
 	fromString: function ( parser, docblock, def ) {
+		var Re = parser.getRegexProvider();
 		var func = def.match( Re.function );
 		if ( func !== null ) {
 			 return new FunctionDef(

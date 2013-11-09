@@ -5,8 +5,8 @@ global.UNITESTS = true;
 global.UNITESTS_NOCOLOR = true;
 
 
-var DocBlock = require( './DocBlock.js' );
-var OopDocBlock = require( './OopDocBlock.js' );
+var DocBlock = require( '../oop/DocBlock.js' );
+var OopDocBlock = require( '../oop/OopDocBlock.js' );
 var Re = require( './RegExes.js' );
 var Fs = require( 'fs' );
 var Path = require( 'path' );

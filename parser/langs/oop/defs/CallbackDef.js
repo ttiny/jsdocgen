@@ -1,7 +1,6 @@
 "use strict";
 
 var FunctionDef = require( './FunctionDef.js' );
-var Re = require( '../RegExes.js' );
 var VarType = require( './VarType.js' );
 
 /**
@@ -17,6 +16,7 @@ CallbackDef.extend( FunctionDef );
 
 CallbackDef.defineStatic( {
 	fromString: function ( parser, docblock, def ) {
+		var Re = parser.getRegexProvider();
 		var callback = def.match( Re.callback );
 		if ( callback ) {
 			return new CallbackDef(

@@ -6,6 +6,7 @@ var Fs = require( 'fs' );
 var Path = require( 'path' );
 var Debug = require( '../../Debug.js' );
 var OopDocBlock = require( '../oop/OopDocBlock.js' );
+var RegExes = require( './RegExes.js' );
 
 function Es5Parser ( argv ) {
 	this._outDir = argv.outdir ? Path.resolve( argv.outdir ) : require( 'os' ).tmpdir();
@@ -14,6 +15,10 @@ function Es5Parser ( argv ) {
 }
 
 Es5Parser.define( {
+
+	getRegexProvider: function () {
+		return RegExes;
+	},
 
 	getLanguage: function () {
 		return 'es5';

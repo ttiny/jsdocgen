@@ -1,7 +1,6 @@
 "use strict";
 
 var FunctionDef = require( './FunctionDef.js' );
-var Re = require( '../RegExes.js' );
 var VarType = require( './VarType.js' );
 
 /**
@@ -19,6 +18,7 @@ MethodDef.extend( FunctionDef );
 
 MethodDef.defineStatic( {
 	fromString: function ( parser, docblock, def ) {
+		var Re = parser.getRegexProvider();
 		var method = def.match( Re.method );
 		if ( method ) {
 			return new MethodDef(

@@ -1,7 +1,6 @@
 "use strict";
 
 var ApiDef = require( '../ApiDef.js' );
-var Re = require( '../RegExes.js' );
 
 /**
 @def class InterfaceDef extends ApiDef
@@ -17,6 +16,7 @@ InterfaceDef.extend( ApiDef );
 
 InterfaceDef.defineStatic( {
 	fromString: function ( parser, docblock, def ) {
+		var Re = parser.getRegexProvider();
 		var iface = def.match( Re.interface );
 		if ( iface !== null ) {
 		 	return new InterfaceDef(
