@@ -17,7 +17,7 @@ var Re = {
 	strUrl 			: '[\\s^]((?:http|https)://[^\\s$]+)'
 };
 
-Re.strVarDef		= function(nc){ return Re.strShortName(nc)+'(?:\\s*:\\s*'+Re.strFullName(nc)+')?(?:\\s*=\\s*'+Re.strString(nc)+')?'; },
+Re.strVarDef		= function(nc){ return Re.strShortName(nc)+'(?:\\s*:\\s*'+Re.strFullName(nc)+'(?:\\[\\])*)?(?:\\s*=\\s*'+Re.strString(nc)+')?'; },
 Re.strFunArgument 	= function(nc){ return '&?\\$'+Re.strVarDef(nc); },
 Re.strFunArgument2 	= function(nc,optcomma){ return '(?:\\s*,'+(optcomma?'?':'')+'\\s*'+Re.strFunArgument(nc)+')'; },
 Re.strFunArguments	= function(nc){ return '\\(\\s*('+(!nc?'?:':'')+Re.strFunArgument(0)+Re.strFunArgument2(0)+'*)?\\s*\\)'; },
