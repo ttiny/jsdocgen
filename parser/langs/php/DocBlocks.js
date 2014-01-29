@@ -575,7 +575,7 @@ module.exports = {
 				if ( this._autoNotices ) {
 					console.log( '\nAUTO NOTICE:' );
 					console.log( 
-						'Inherted documentation' +
+						'Inherited documentation' +
 						'\n  for element ' + DocBlockParser.formatElement( block ) +
 						'\n  in file ' + DocBlockParser.formatFile( block ) +
 						'\n  from element ' + DocBlockParser.formatElement( inherit ) +
