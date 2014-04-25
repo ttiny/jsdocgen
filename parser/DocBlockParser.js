@@ -257,6 +257,10 @@ DocBlockParser.define( {
 	*/
 	parseDescription: function ( text ) {
 		return Markdown( text, this._markdownOptions ).html;
+	},
+
+	getLanguage: function () {
+		return null;
 	}
 
 } );

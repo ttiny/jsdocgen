@@ -8,7 +8,7 @@ defs.JSDOCGEN_VERSION = '0.9dev';
 
 var Fs = require( 'fs' );
 var Build = require( '../deps/docviewjs/build/Build.js' );
-var ArgvUtils = require( 'ArgvUtils' );
+var ArgvUtils = require( 'Utils/Argv' );
 var Path = require( 'path' );
 
 var DIR_THEME = __dirname + '/theme';
@@ -16,7 +16,7 @@ var DIR_REDIST = __dirname + '/redist';
 var DIR_SRC = __dirname + '/src';
 
 
-var argv = ArgvUtils.parseArgs();
+var argv = ArgvUtils.parse();
 
 
 if ( argv.def ) {

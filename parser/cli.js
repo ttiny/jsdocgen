@@ -1,7 +1,7 @@
 "use strict";
 
-var PathUtils = require( 'PathUtils' );
-var ArgvUtils = require( 'ArgvUtils' );
+var PathUtils = require( 'Utils/Path' );
+var ArgvUtils = require( 'Utils/Argv' );
 var DocBlockParser = require( './DocBlockParser.js' );
 var Path = require( 'path' );
 
@@ -75,4 +75,4 @@ function main ( argv ) {
 	
 }
 
-return main( ArgvUtils.parseArgs() );
+return main( ArgvUtils.parse() );

@@ -8,7 +8,7 @@ var ChildProcess = require( 'child_process' );
 var Path = require( 'path' );
 var Fs = require( 'fs' );
 var Semaphore = require( 'Sync' ).Semaphore;
-var PathUtils = require( 'PathUtils' );
+var PathUtils = require( 'Utils/Path' );
 var Re = require( './RegExes.js' );
 
 function PhpParser ( argv ) {

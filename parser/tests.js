@@ -57,7 +57,7 @@ test( JSON.stringify( parser.parseDocBlock( blocks[0] ) ) == JSON.stringify( hea
 var caught = false;
 try { parser.parseDocBlock( '/**\n@stable\n@unstable\n*/' ); }
 catch( e ) { caught = true; }
-test ( caught === true );
+test ( caught === false );
 
 
 
