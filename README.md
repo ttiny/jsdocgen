@@ -23,63 +23,75 @@ Contents
 --------
 
 - [Status](#status)
-- [Very quick start](#quickstart)
+- [Very quick start](#very-quick-start)
 - [Usage](#usage)
-  - [Writing some docs](#writingdocs)
-    - [Doc comments](#doccomments)
+  - [Writing some docs](#writing-some-documentation)
+    - [Doc comments](#doc-comments)
     - [Markdown](#markdown)
-    - [Basic tags](#basictags)
-    - [Inline tags](#inlinetags)
-    - [Context specific tags](#specifictags)
-   - [Generating the docs](#generating)
-     - [Parsing the sources](#parsing)
-     - [Building the front end](#buildfrontend)
-- [Using the parser](#parser)
-  - [PHP specific options](#php-parser)
+    - [Basic tags](#basic-tags)
+    - [Inline tags](#inline-tags)
+    - [Context specific tags](#context-specific-tags)
+   - [Generating the docs](#generating-the-docs)
+     - [Parsing the sources](#parsing-the-sources)
+     - [Building the front end](#building-the-front-end)
+- [Using the parser](#using-the-parser)
+  - [PHP specific options](#php-specific-options)
 - [Authors](#authors)
 
-<a name="status"></a>
+
 Status
 ------
-The project currently supports only PHP but other languages (JavaScript, Java) are planned for the next release.
-The project version is 0.8 and is considered beta because it is not tested for long period and it may have rough edges.
-The PHP support is almost fully complete. All OOP features of PHP 5.4 are supported + functions, the only thing that is not
-implemented is the @inheritdoc tag to inherit docs from parent class, but there is autoinherit functionality for
-class methods without own doc comments. Documenting global variables or constants is not supported at the moment and
-currently there are no plans for adding such support. If necessary these elements can be described in the file level doc comment.
-The focus of jsdocgen is towards class libraries and there is limited ability to document scripts.
+The project currently supports only PHP but other languages (JavaScript, Java)
+are planned for the next release. The project version is 0.9 and is considered
+beta because it is not tested for long period and it may have rough edges. The
+PHP support is almost fully complete. All OOP features of PHP 5.4 are
+supported + functions, the only thing that is not implemented is the
+@inheritdoc tag to inherit docs from parent class, but there is autoinherit
+functionality for class methods without own doc comments. Documenting global
+variables or constants is not supported at the moment and currently there are
+no plans for adding such support. If necessary these elements can be described
+in the file level doc comment. The focus of jsdocgen is towards class
+libraries and there is limited ability to document scripts.
 
-The project is tested only on Windows but there is nothing Windows specific in it that would prevent it from working on other OS-es.
-It would only require downloading the Node.js binary for the appropriate OS and converting a one line batch file to shell script.
-Once the project moves out of beta and I get my hands on other OS-es they will be officially supported too.
+The project is tested Windows, OSX and Linux.
 
 
-<a name="quickstart"></a>
+
 Very quick start
 ----------------
-There are no dependencies (besides PHP 5.4 itself) or anything of this sort, all you need to do is unzip jsdocgen,
-prepare your project and type two commands in the shell. The quickest way to build some docs is to use the bundled example. 
+There are no dependencies (besides PHP 5.4 itself) or anything of this sort,
+all you need to do is unzip jsdocgen, prepare your project and type two
+commands in the shell. The quickest way to build some docs is to use the
+bundled example.
 
 1. Open a shell to the folder of this readme.
 2. Parse the sources of the project  
    
-   `jsdocgen -lang=php -projectdir=example -outdir=example/build/docs -intro=example/intro.md -autoinherit`  
+   ```sh
+   jsdocgen -lang=php -projectdir=example -outdir=example/build/docs -intro=example/intro.md -autoinherit
+   ```
    
-   If we wanted the command to be absolutely minimal we could omit the `-intro` and `-autoinherit`.  
-   
+   If we wanted the command to be absolutely minimal we could omit the
+   `-intro` and `-autoinherit`.   
    
 3. Build the viewer (front end) for your project  
    
-   `jsdocgen build -lang=php -outdir=example/build -def=ProjectName:Example -def=ProjectSubtitle:Project`  
+   ```sh
+   jsdocgen build -lang=php -outdir=example/build -def=ProjectName:Example -def=ProjectSubtitle:Project
+   ```
    
-   If we wanted the command to be absolutely minimal we could omit the two `-def` arguments.  
+   If we wanted the command to be absolutely minimal we could omit the two
+   `-def` arguments.
    
-   
-4. Browse to `example/build/index.html` or check the screenshot in [example/screenshot.png](example/screenshot.png)
-5. Everything in the build directory would be your docs. You need to redistribute everything that is in there.
+4. Browse to `example/build/index.html` or check the screenshot in
+   [example/screenshot.png](example/screenshot.png)
+5. Everything in the build directory would be your docs. You need to
+   redistribute everything that is in there.
 
 
-The output of the first command should look similar to this, and the second command is not expected to output anything:
+The output of the first command should look similar to this, and the second
+command is not expected to output anything:
+
 ```
 Looking for sources...
   ...........................\trunk\src */**.php:thirdparty ... 0.057s
@@ -96,34 +108,36 @@ Doc comments parsed in 1.769s
 Finished in 3.391s
 ```
 
-<a name="usage"></a>
+
 Usage
 =====
-This is guide how to write docs for jsdocgen and how to build these docs from the sources.
-Here only PHP is covered and the rest of the guide assumes PHP sources. Building the docs
-for other languages would be very similar but there might be some language related differences
-which are documented elsewhere.
+This is guide how to write docs for jsdocgen and how to build these docs from
+the sources. Here only PHP is covered and the rest of the guide assumes PHP
+sources. Building the docs for other languages would be very similar but there
+might be some language related differences which are documented elsewhere.
 
-jsdocgen is split in two parts - parser and viewer. The parser extracts the documentation
-from the project sources and converts it to more portable format (JSON). The viewer loads
-the formatted docs and displays them in the browser.
+jsdocgen is split in two parts - parser and viewer. The parser extracts the
+documentation from the project sources and converts it to more portable format
+(JSON). The viewer loads the formatted docs and displays them in the browser.
 
-<a name="writingdocs"></a>
+
 Writing some documentation
 --------------------------
-Writing documentation for jsdocgen is very similar to other system like PHPDocumentor or Doxygen.
-Actually the project started because PHPDocumentor couldn't serve my needs any more.
-If you already have documentation in PHPDocumentor format it will mostly work without changes.
-There are minor differences that can be changed with few simple "replace in files" commands.
-That doesn't mean jsdocgen strives for compatibility, but it is based on what I was familiar with.
-Unlike other popular documentation systems, the descriptions of jsdocgen are in markdown format,
-making them easier to read and write (in contrast to using HTML/XML) and suitable for formatting
-large volumes of text.
+Writing documentation for jsdocgen is very similar to other system like
+PHPDocumentor or Doxygen. Actually the project started because PHPDocumentor
+couldn't serve my needs any more. If you already have documentation in
+PHPDocumentor format it will mostly work without changes. There are minor
+differences that can be changed with few simple "replace in files" commands.
+That doesn't mean jsdocgen strives for compatibility, but it is based on what
+I was familiar with. Unlike other popular documentation systems, the
+descriptions of jsdocgen are in markdown format, making them easier to read
+and write (in contrast to using HTML/XML) and suitable for formatting large
+volumes of text.
 
-<a name="doccomments"></a>
+
 ### Doc comments
-Doc comments are block comments with additional asterisk in the opening comment.
-They can be in PHPDocumentor format:
+Doc comments are block comments with additional asterisk in the opening
+comment. They can be in PHPDocumentor format:
 
 ```
 /**
@@ -176,7 +190,7 @@ tag, is a file-level block.
 The text of the summary, the description and the description
 of each tag that has free form text is in markdown format.
 
-<a name="markdown"></a>
+
 ### Markdown
 The markdown is mostly compatible with "GitHub Flavoured Markdown".
 - [GFM](https://help.github.com/articles/github-flavored-markdown)
@@ -184,27 +198,31 @@ The markdown is mostly compatible with "GitHub Flavoured Markdown".
 
 Additionally:
 - `~~~` can be used for code blocks (GitHub also supports this)
-- `[Internal link][^anchor-name]` will link to an anchor placed elsewhere in the same document.
+- `[Internal link][^anchor-name]` will link to an anchor placed elsewhere in
+  the same document.
 - `[^anchor-name]:` will place and anchor (it will be invisible)
 - This is `___underline___`.
 - This is `--strike though--`.
 - Line breaks inside headers.
-- GFM line breaks (enter) are not respected.
-  Always two trailing spaces and a newline to insert a line break.
-- `\b` will delete the previous character. This is useful if, for example, you want to type `*/`
-  without closing the comment. You can write it as `* \b/` and it will show as `*/`.
+- GFM line breaks (enter) are not respected. Always two trailing spaces and a
+  newline to insert a line break.
+- `\b` will delete the previous character. This is useful if, for example, you
+  want to type `*/` without closing the comment. You can write it as `* \b/`
+  and it will show as `*/`.
 - Additional escape characters: `~` `<` `>` `/` `|` and `space` and `tab`.
 
-<a name="basictags"></a>
+
 ### Basic tags:
 These are common tags that apply to all source elements.
 
 `@package <package[.subpackage.subsub...]>`  
-Only supported in the file level block, marks all elements in this file as belonging to a package.
-If this tag is missing, the file will be assigned to the default package (which can be user defined).
+Only supported in the file level block, marks all elements in this file as
+belonging to a package. If this tag is missing, the file will be assigned to
+the default package (which can be user defined).
 
 `@private`  
-The element of the doc comment is marked private. It will not show in the viewer.
+The element of the doc comment is marked private. It will not show in the
+viewer.
 
 `@deprecated [description]`  
 Marks the API as deprecated and shows a warning.
@@ -222,7 +240,9 @@ Puts a copyright field in the meta section.
 Not implemented at the moment.
 
 `@see <target> [description]`  
-Creates a 'see also' section and puts an entry with link there. The see target can be one of the following formats.
+Creates a 'see also' section and puts an entry with link there. The see target
+can be one of the following formats:
+
 - `function()`
 - `Class` or `\Full\Class\Name`
 - `Class::$property`
@@ -232,13 +252,15 @@ Creates a 'see also' section and puts an entry with link there. The see target c
 - `file/relative/tothe/projectdir.php`
 - `http://url.com`
 
-If classes and functions are not expressed with their full form (with namespace prefix) they are resolved
-by looking for them in the current namespace or class and then in the global namespace.
-In the context of a class 'function()' can refer to a method of the same class named 'function', the class prefix can be omitted.
-Also the 'php:' prefix for built symbols can be omitted and jsdocgen will attempt to autodetect that the symbol comes
-with PHP.
+If classes and functions are not expressed with their full form (with
+namespace prefix) they are resolved by looking for them in the current
+namespace or class and then in the global namespace. In the context of a class
+'function()' can refer to a method of the same class named 'function', the
+class prefix can be omitted. Also the 'php:' prefix for built symbols can be
+omitted and jsdocgen will attempt to autodetect that the symbol comes with
+PHP.
 
-<a name="inlinetags"></a>
+
 ### Inline tags
 These can be inlined in another tags' description.
 
@@ -246,102 +268,110 @@ These can be inlined in another tags' description.
 The same as `@see` but will not create a 'see also' section and instead
 show the link where the tags is.
 
-<a name="specifictags"></a>
+
 ### Context specific tags
 
 `@param <type> [description]`  
-Can appear in the context of functions and methods. One `@param` tag
-can be placed for each function argument, in the same order. The 'type'
-describes the type of the variable that this argument accepts. If the
-argument contains a type hint, only the type hint is taken into account
-and everything in the @param tag is considered a description.
-Type can refer to any class with its full or short name, also to builtin
-PHP types or can be array of type, e.g. array of strings `string[]`.
-Other types that will not show as links include `mixed`, `int`, `float`,
-`string`, `null`, `function`, `callback`. Multiple types can be separated
-with a pipe, e.g. `string|float[]`.
+Can appear in the context of functions and methods. One `@param` tag can be
+placed for each function argument, in the same order. The 'type' describes the
+type of the variable that this argument accepts. If the argument contains a
+type hint, only the type hint is taken into account and everything in the
+@param tag is considered a description. Type can refer to any class with its
+full or short name, also to builtin PHP types or can be array of type, e.g.
+array of strings `string[]`. Other types that will not show as links include
+`mixed`, `int`, `float`, `string`, `null`, `function`, `callback`. Multiple
+types can be separated with a pipe, e.g. `string|float[]`.
 
 `@return <type> [description]`  
-Can appear in the context of functions and methods. Describes the return
-value of the function. The type is in the same format as in `@param` and
+Can appear in the context of functions and methods. Describes the return value
+of the function. The type is in the same format as in `@param` and
 additionally type `$this` can indicate the method can be used for chain calls.
 
 `@throws <type> [description]`  
-Can appear in the context of a function or method. Indicates that the
-function may throw exception. 'type' is the same as in `@param`.
+Can appear in the context of a function or method. Indicates that the function
+may throw exception. 'type' is the same as in `@param`.
 
 `@vaarg [description]`  
-Can appear in the context of functions and methods. Indicates the function accepts
-variable number of arguments.
+Can appear in the context of functions and methods. Indicates the function
+accepts variable number of arguments.
 
 `@var <type> [description]`  
-Can appear in the context of a property to describe the type of this
-property. 'type' is the same as in `@param`. If this tag appears and it has
-description, but there is no doc comment summary, the description of the tag
-will be put in the place of the doc comment summary.
+Can appear in the context of a property to describe the type of this property.
+'type' is the same as in `@param`. If this tag appears and it has description,
+but there is no doc comment summary, the description of the tag will be put in
+the place of the doc comment summary.
 
 
-<a name="generating"></a>
+
 Generating the docs
 -------------------
-Once you populate your sources with doc comments you can use jsdocgen to parse the sources
-and generate docs in a format it can display. The process is twofold. First you invoke
-the parser, then you build the front end to make it specific for your project -
-to have your project's title and know about the location of your docs. The frontend
-needs to be built only once (unless you want to update), while the docs will be re-generated
-many times while you work and change them.
+Once you populate your sources with doc comments you can use jsdocgen to parse
+the sources and generate docs in a format it can display. The process is
+twofold. First you invoke the parser, then you build the front end to make it
+specific for your project - to have your project's title and know about the
+location of your docs. The frontend needs to be built only once (unless you
+want to update), while the docs will be re-generated many times while you work
+and change them.
 
-<a name="parsing"></a>
+
 ### Parsing the sources
-Before starting the parser it is important to understand how it works.
-It uses PHP's built in reflection capabilities, so to
-parse the sources it actually includes them in a PHP script. The downside
-of this approach is it can only parse libraries. On the upside it is fast.
-If you attempt to parse scripts that perform actions, not just declare classes,
-these scripts will actually be executed and may do something unwanted.
+Before starting the parser it is important to understand how it works. It uses
+PHP's built in reflection capabilities, so to parse the sources it actually
+includes them in a PHP script. The downside of this approach is it can only
+parse libraries. On the upside it is fast. If you attempt to parse scripts
+that perform actions, not just declare classes, these scripts will actually be
+executed and may do something unwanted.
 
-Before executing any scripts, the parser will define a constant
-named `JSDOCGEN_PHP_PARSER`, so if you need to tweak your sources
-for the parsing step, you can identify that the script is started
-by jsdocgen by checking if this constant is defined.
+Before executing any scripts, the parser will define a constant named
+`JSDOCGEN_PHP_PARSER`, so if you need to tweak your sources for the parsing
+step, you can identify that the script is started by jsdocgen by checking if
+this constant is defined.
 
-Additionally most libraries require some kind of autoloading mechanism
-or other setup. If your project needs such step you can create
-a small script that the parser will perform before including
-any sources.
+Additionally most libraries require some kind of autoloading mechanism or
+other setup. If your project needs such step you can create a small script
+that the parser will perform before including any sources.
 
 #### Example
-Lets look at the quick start example in details:  
-```
+Lets look at the quick start example in details:
+
+```sh
 jsdocgen -lang=php -projectdir=example -outdir=example/build/docs -intro=example/intro.md -autoinherit
 ```
 
-`-lang=php` is mandatory since extended language supported is planned for the next release.
+`-lang=php` is mandatory since extended language supported is planned for the
+next release.
 
 `-projectdir` is mandatory and tells jsdocgen where to look for source files.
 
-`-outdir` tell jsdocgen where to put the generated docs. If the directory does not exist it will be created.
-Strictly speaking this argument is optional but who wants to look for their sources in the temp folder. This
-directory will be filled with a lot of files that are not immediately useful, so you probably want them in
-a subfolder of where your docs will be. In this case the root of the docs is 'example/build' and this is where
-the viewer is placed, and 'docs' is the subfolder.
+`-outdir` tell jsdocgen where to put the generated docs. If the directory does
+not exist it will be created. Strictly speaking this argument is optional but
+who wants to look for their sources in the temp folder. This directory will be
+filled with a lot of files that are not immediately useful, so you probably
+want them in a subfolder of where your docs will be. In this case the root of
+the docs is 'example/build' and this is where the viewer is placed, and 'docs'
+is the subfolder.
 
-`-intro` tells jsdocgen to parse this file as markdown and show it on the front, before any API is selected.
+`-intro` tells jsdocgen to parse this file as markdown and show it on the
+front, before any API is selected.
 
-`-autoinherit` will make jsdocgen attemt to automatically inherit documentation for class members without
-a doc comment. For example if you have interface which defines a method and class which implements
-this interface. But the method is not implemented by the class but by a trait that the class uses.
-If the method is documented in the interface, jsdocgen will be able to inherit its documentation for
-all classes that implement it (if the doc comment of the method implementation is omitted).
+`-autoinherit` will make jsdocgen attemt to automatically inherit
+documentation for class members without a doc comment. For example if you have
+interface which defines a method and class which implements this interface.
+But the method is not implemented by the class but by a trait that the class
+uses. If the method is documented in the interface, jsdocgen will be able to
+inherit its documentation for all classes that implement it (if the doc
+comment of the method implementation is omitted).
 
-The important option that you will most likely need to include a setup script is `-phpinit=<location>` to point
-to the location of your setup script. This setup can boot your autoloader or just include some files
-so there won't be any undefined classes when your sources are included.
+The important option that you will most likely need to include a setup script
+is `-phpinit=<location>` to point to the location of your setup script. This
+setup can boot your autoloader or just include some files so there won't be
+any undefined classes when your sources are included.
 
-The "TravelSDK Core" from the demo section is not using special init script for the docs at all,
-it is directly including its own init script from the command line.
-But if it was to use init script for the documentation it would
+The "TravelSDK Core" from the demo section is not using special init script
+for the docs at all, it is directly including its own init script from the
+command line. But if it was to use init script for the documentation it would
 look like this - just a single line to include the autoloader of the library:
+
 ```php
 <?
 
@@ -350,21 +380,23 @@ require_once __DIR__ . '/../../lib/travelsdk-core-php/src/init.php';
 ?>
 ```
 
-Additional useful options are `-warnings` or `-strict` which will display warning messages about the
-documentation if, for example, there is a `@see` tag that points to invalid symbol. This helps keeping your
-docs in good shape.
+Additional useful options are `-warnings` or `-strict` which will display
+warning messages about the documentation if, for example, there is a `@see`
+tag that points to invalid symbol. This helps keeping your docs in good shape.
 
 For all available options see "Using the parser" bellow.
 
-<a name="buildfrontend"></a>
+
 ### Building the front end
-Onece the documentation is built from sources we need to build the front end that displays them. This front
-end needs a building step so it knows about the name of your project. It only needs to be built once and
-not every time the documentation is rebuilt.
+Onece the documentation is built from sources we need to build the front end
+that displays them. This front end needs a building step so it knows about the
+name of your project. It only needs to be built once and not every time the
+documentation is rebuilt.
 
 #### Example
 Again the example from the quick start:  
-```
+
+```sh
 jsdocgen build -lang=php -outdir=example/build -def=ProjectName:Example -def=ProjectSubtitle:Project
 ```
 
@@ -374,14 +406,16 @@ jsdocgen build -lang=php -outdir=example/build -def=ProjectName:Example -def=Pro
 
 `-outdir` is where the viewer's main file (index.html) will be placed.
 
-The two `-def` arguments define some variables that will be hardcoded in the viewer while building it.
+The two `-def` arguments define some variables that will be hardcoded in the
+viewer while building it.
 
-By default the viewer will look for the docs in subfolder of where it is placed named 'docs'. If you
-choose a different location you also need to provide `-docslocation=<location>` argument. Location
-points to a folder relative to the viewer's root.
+By default the viewer will look for the docs in subfolder of where it is
+placed named 'docs'. If you choose a different location you also need to
+provide `-docslocation=<location>` argument. Location points to a folder
+relative to the viewer's root.
 
 
-<a name="parser"></a>
+
 Using the parser
 ================
 The parser is started with a command from the shell.
@@ -415,17 +449,20 @@ temp directory.
 ```
 -pattern=pattern
 ```
-Optional. Pattern(s) in the -projectdir used to recognize source files. There is
-default based on the selected -lang. For example for PHP the default pattern is
-to look inside all subdirectories for .php files.
+Optional. Pattern(s) in the -projectdir used to recognize source files. There
+is default based on the selected -lang. For example for PHP the default
+pattern is to look inside all subdirectories for .php files.
 
-Patterns are simple regular expressions. `*` matches everything but forward slash `/`, and `**`
-matches everything. Non greedy and only forward slashes are supported (they work fine on Windows).
-For example `*.php` will match all files with extension 'php' in the same directory. `**.php`
-will match all files with extension 'php' in the same directory and all sub directories. Multiple
-patterns can be delimited with a pipe `|`. For example `*.php4|*.php5` will match all files 
-with extension 'php4' or 'php5'. Additionally a list of exclude patterns can be appended after a
-colon `:`. Files and directories matching one of the exclude patterns will be filtered out.
+Patterns are simple regular expressions. `*` matches everything but forward
+slash `/`, and `**` matches everything. Non greedy and only forward slashes
+are supported (they work fine on Windows). For example `*.php` will match all
+files with extension 'php' in the same directory. `**.php` will match all
+files with extension 'php' in the same directory and all sub directories.
+Multiple patterns can be delimited with a pipe `|`. For example
+`*.php4|*.php5` will match all files with extension 'php4' or 'php5'.
+Additionally a list of exclude patterns can be appended after a colon `:`.
+Files and directories matching one of the exclude patterns will be filtered
+out.
 
 More examples:
 - `*.cpp` will match "file.cpp" but not "dir/file.cpp".
@@ -446,40 +483,46 @@ the same as the descriptions in the doc comments of the selected language.
 ```
 -defaultpackage=packagename
 ```
-Optional. Put symbols without package in this one. The effect of this also depends on the actual language.
+Optional. Put symbols without package in this one. The effect of this also
+depends on the actual language.
 
 
 ```
 -withprivatemembers
 ```
-Optional. Will include doc comments which are marked with `@private` or private class members, which are
-otherwise excluded from the generated documentation.
+Optional. Will include doc comments which are marked with `@private` or
+private class members, which are otherwise excluded from the generated
+documentation.
 
 
 ```
 -warnings
 ```
-Optional. Will print warnings about errors that will not prevent the docs from working, but may hinder quality.
+Optional. Will print warnings about errors that will not prevent the docs from
+working, but may hinder quality.
 
 
 ```
 -strict
 ```
-Optional. Will treat all warnings as errors (does not depend on the -warnings option).
+Optional. Will treat all warnings as errors (does not depend on the -warnings
+option).
 
 
 ```
 -autonotices
 ```
-Optional. Displays console message when doing something automatically like detecting see symbols (see -phpautosee),
-or automatically inheriting missing documentation for class methods and such (see -autoinherit).
+Optional. Displays console message when doing something automatically like
+detecting see symbols (see -phpautosee), or automatically inheriting missing
+documentation for class methods and such (see -autoinherit).
 
 
 ```
 -autoinherit
 ```
-Optional. Will attempt to inherit documentation for inherited class members which don't have a doc comment.
-The effect of this depends on the actual language.
+Optional. Will attempt to inherit documentation for inherited class members
+which don't have a doc comment. The effect of this depends on the actual
+language.
 
 
 ```
@@ -491,65 +534,65 @@ Optional. Shows debug info and keeps intermediate files.
 ```
 -cache
 ```
-Optional. Use caching if possible. Used while debugging to avoid parsing sources if they were not changed.
+Optional. Use caching if possible. Used while debugging to avoid parsing
+sources if they were not changed.
 
 
-<a name="php-parser"></a>
+
 PHP specific options
 --------------------
 
 If no pattern is specified, the pattern for this parser defaults to
-`**.php:.*|**/.*` which is to include all files with php extension
-recursively and to exclude all files and folders starting with a dot.
+`**.php:.*|**/.*` which is to include all files with php extension recursively
+and to exclude all files and folders starting with a dot.
 
-**Warning:** 
-This parser uses PHP's built in reflection capabilities, so to
-parse the sources it actually includes them in a PHP script. This
-means it can only parse libraries. If you attempt to parse scripts
-that perform actions, these scripts will actually be executed and
-may do something unwanted.
+**Warning:**  
+This parser uses PHP's built in reflection capabilities, so to parse the
+sources it actually includes them in a PHP script. This means it can only
+parse libraries. If you attempt to parse scripts that perform actions, these
+scripts will actually be executed and may do something unwanted.
 
-Before executing any scripts, the parser will define a constant
-named `JSDOCGEN_PHP_PARSER`, so if you need to tweak your sources
-for the parsing step, you can identify that the script is started
-by jsdocgen by checking if this constant is defined.
+Before executing any scripts, the parser will define a constant named
+`JSDOCGEN_PHP_PARSER`, so if you need to tweak your sources for the parsing
+step, you can identify that the script is started by jsdocgen by checking if
+this constant is defined.
 
 
 ```
 -phpinit=setup_script
 ```
-Optional. Setup script for the project. Some libraries need some initialization
-like including their autoloader. This script will be performed before any other
-source file.
+Optional. Setup script for the project. Some libraries need some
+initialization like including their autoloader. This script will be performed
+before any other source file.
 
 
 ```
 -phpbin=path
 ```
-Optional. Path to the PHP binary to use. Defaults to "php" and it should be in the
-system path for the default to work.
+Optional. Path to the PHP binary to use. Defaults to "php" and it should be in
+the system path for the default to work.
 
 
 ```
 -phpautosee
 ```
 Optional. Attempts to detect and link symbol references like methods() and
-classes::etc() in the descriptions, as if they were enclosed in a `{@see}` tag.
-Use with caution as this feature is not fully implemented and could interfere
-with markdown and/or HTML tags.
+classes::etc() in the descriptions, as if they were enclosed in a `{@see}`
+tag. Use with caution as this feature is not fully implemented and could
+interfere with markdown and/or HTML tags.
 
 
 ```
 -phpextrafiles="file1[|file2|file3...]"
 ```
-Optional. Pipe delimited list of additional files to parse for their file-level doc comment.
-The files in this list are parsed **only for their file-level doc comment**. Other
-elements will not be included. These files may be scripts as they will not be
-included by the PHP parser as the rest of the sources, only read as plain text and their
-first comment extracted.
+Optional. Pipe delimited list of additional files to parse for their
+file-level doc comment. The files in this list are parsed **only for their
+file-level doc comment**. Other elements will not be included. These files may
+be scripts as they will not be included by the PHP parser as the rest of the
+sources, only read as plain text and their first comment extracted.
 
 
-<a name="authors"></a>
+
 Authors
 -------
 Borislav Peev (borislav.asdf at gmail dot com)
