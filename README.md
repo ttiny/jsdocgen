@@ -53,7 +53,7 @@ no plans for adding such support. If necessary these elements can be described
 in the file level doc comment. The focus of jsdocgen is towards class
 libraries and there is limited ability to document scripts.
 
-The project is tested Windows, OSX and Linux.
+The project is tested on Windows, OSX and Linux.
 
 
 
