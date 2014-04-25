@@ -9,9 +9,9 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 export NODE_PATH=$DIR/deps/docviewjs/deps/node/node_modules:$DIR/deps/node_modules
 export NODE_BIN=$DIR/deps/docviewjs/deps/node/node-$(uname)
 if [[ $1 == "test" ]]; then
-	"$NODE_BIN" "$DIR/parser/tests.js" $@
+	"$NODE_BIN" "$DIR/parser/tests.js" "$@"
 elif [[ $1 == "build" ]]; then
-	"$NODE_BIN" "$DIR/viewer/build.js" $@
+	"$NODE_BIN" "$DIR/viewer/build.js" "$@"
 else
-	"$NODE_BIN" "$DIR/parser/cli.js" $@
+	"$NODE_BIN" "$DIR/parser/cli.js" "$@"
 fi
