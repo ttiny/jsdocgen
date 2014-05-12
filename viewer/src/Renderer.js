@@ -321,18 +321,19 @@
 				return data.length > 0 ? $TT( 'Tmpl.DocBlockViewer.Renderer.Meta', data ) : '';
 			}
 
+			//todo: wtf is this not in its own template?
 			var html = '';
 			html += summary( docblock );
 			html += deprecated( docblock );
+			html += remarks( docblock );
 			html += attrs( docblock );
 			html += syntax( docblock );
 			html += thraws( docblock );
-			html += returns( docblock );
 			html += args( docblock );
+			html += returns( docblock );
 			html += vartype( docblock );
 			html += inherited( docblock );
 			html += derived( docblock );
-			html += remarks( docblock );
 			html += members( docblock );
 			html += seealso( docblock );
 			html += meta( docblock );
