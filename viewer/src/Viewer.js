@@ -42,10 +42,12 @@ jsdocgen_data._callbacks = {};
 	 * Dispatched when loading content is finished in the component.
 	 * @def event DockBlockViewer::DocBlockViewer.Loaded
 	 */
-	function DocBlockViewer ( config ) {
+	function DocBlockViewer ( appView, config ) {
 		View.call( this );
 		this._element.classList.add( 'DocBlockViewer' );
 
+
+		this._appView = appView;
 		this._cfg = config;
 		this._docContext = new DocBlockViewer.SymbolContext();
 		this._lastDocContext = null;
@@ -193,6 +195,7 @@ jsdocgen_data._callbacks = {};
 				this._vContents.setHtml( null );
 			}
 			
+			this._appView._element.scrollTop = 0;
 			this._vRenderer.render( this._docContext );
 		},
 

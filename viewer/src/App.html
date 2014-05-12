@@ -87,7 +87,7 @@
 				_appView = new View.AppView();
 				_appView.setClass( 'jsdocgen' );
 				_appView.setText( '{str.app.title}' );
-				var docviewer = new DocBlockViewer( {
+				var docviewer = new DocBlockViewer( _appView, {
 					DocsLocation: '/*@=JSDOCGEN_DOCS*/',
 					Lang: '/*@=JSDOCGEN_LANG*/'
 				} );
