@@ -202,7 +202,7 @@ Additionally:
   the same document.
 - `[^anchor-name]:` will place and anchor (it will be invisible)
 - This is `___underline___`.
-- This is `--strike though--`.
+- This is `--strike through--`.
 - Line breaks inside headers.
 - GFM line breaks (enter) are not respected. Always two trailing spaces and a
   newline to insert a line break.
