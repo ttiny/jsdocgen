@@ -230,7 +230,7 @@ Marks the API as deprecated and shows a warning.
 `@author <author>`  
 Puts an author field in the meta section.
 
-`@license <licese>`  
+`@license <license>`  
 Puts a license field in the meta section.
 
 `@copyright <copyright>`  
