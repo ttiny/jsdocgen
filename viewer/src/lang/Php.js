@@ -60,6 +60,13 @@
 			return ret;
 		},
 
+		makeSymbolName: function ( ns, name ) {
+			if ( ns == '<global>' ) {
+				return name;
+			}
+			return ns + '\\' + name;
+		},
+
 		// the reverse of makeSymbolUrl()
 		getSymbolContextFromUrl: function ( url ) {
 

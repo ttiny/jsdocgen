@@ -135,9 +135,14 @@
 					if ( symbol[ this.accordionType ] != this._groupIndex ) {
 						continue;
 					}
+					var fullName = symbol.name;
+					if ( this.accordionType != 'ns' && symbol.ns > 0 ) {
+						fullName = this._lang.makeSymbolName( this._index.groups.ns[ symbol.ns ], fullName );
+					}
 					data[key].push( {
 						url: this._lang.makeSymbolUrl( key, symbol, this._index ),
-						name: symbol.name
+						name: symbol.name,
+						FullName: fullName
 					} );
 				}
 			}
