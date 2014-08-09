@@ -505,7 +505,7 @@ namespace DocBlockParser {
 			$class = $reflector->getShortName();
 			$start = $reflector->getStartLine();
 			$end = $reflector->getEndLine();
-			$type = ( $reflector->isTrait() ? T_TRAIT : T_CLASS );
+			$type = ( $reflector->isTrait() ? T_TRAIT : ( $reflector->isInterface() ? T_INTERFACE : T_CLASS ) );
 
 			$tokens = $this->_getFileTokens( $file );
 			$lasttoken = count( $tokens );
@@ -535,6 +535,13 @@ namespace DocBlockParser {
 
 			foreach ( $reflector->getTraits() as $trait ) {
 				$ret = array_merge( $ret, $this->_findConstDocBlocks( $trait ) );
+			}
+
+			foreach ( $reflector->getInterfaces() as $iface ) {
+				if ( $iface->isInternal() ) {
+					continue;
+				}
+				$ret = array_merge( $ret, $this->_findConstDocBlocks( $iface ) );
 			}
 
 			$parent = $reflector->getParentClass();
