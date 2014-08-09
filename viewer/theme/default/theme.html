@@ -264,7 +264,7 @@
 	<% if ( def.value ) { %>
 	<p><%= R.get( 'str.docblockviewer.renderer.'+(def.type=='const'?'const':'var')+'value' ) %>: <%
 		if ( def.value.indexOf( '\n' ) > 0 ) {
-			prn( '<code>' );
+			prn( '<code class="block">' );
 			prn( def.value );
 			prn( '</code>' );
 		}
