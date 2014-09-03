@@ -412,7 +412,13 @@ namespace DocBlockParser {
 				else if ( $type == T_FUNCTION ) {
 					$i = $this->_findNextToken( $tokens, $lasttoken, $i + 1, T_STRING, $end );
 					if ( $i != false ) {
-						$i = $this->_skipToLine( $tokens, $lasttoken, $i + 1, $reflector->getMethod( $tokens[$i][1] )->getEndLine() );
+						$method = $reflector->getMethod( $tokens[$i][1] );
+						$startLine = $method->getStartLine();
+						$endLine = $method->getEndLine();
+						if ( $startLine === $endLine ) {
+							++$endLine;
+						}
+						$i = $this->_skipToLine( $tokens, $lasttoken, $i + 1, $endLine );
 						if ( $i === false ) {
 							break;
 						}
@@ -465,7 +471,7 @@ namespace DocBlockParser {
 			return false;
 		}
 
-		private function _findPropValue ( &$tokens, $lasttoken, $offset, $end ) {
+		private function _findPropValue ( &$tokens, $lasttoken, $offset, $end, $reflector ) {
 			$ret = '';
 			$collecting = false;
 			$lastKnownLine = 0;
@@ -491,6 +497,9 @@ namespace DocBlockParser {
 			}
 			$ret = trim( $ret );
 			if ( strlen( $ret ) > 0 ) {
+				if ( substr( $ret, 0, 6 ) === 'self::' ) {
+					$ret = $reflector->getName() . '::' . substr( $ret, 6 );
+				}
 				$f = create_function( '', 'return ' . $ret . ';' );
 				return [ $lastKnownLine, $f() ];
 			}
@@ -581,7 +590,7 @@ namespace DocBlockParser {
 						$startLine = $tokens[$i][2];
 					}
 					$name = substr( $tokens[$i][1], 1 );
-					$propval = $this->_findPropValue( $tokens, $lasttoken, $i + 1, $end );
+					$propval = $this->_findPropValue( $tokens, $lasttoken, $i + 1, $end, $reflector );
 					$endLine = max( $startLine, $propval[0] );
 					$ret[$name] = [ $file, $startLine, $endLine, $propval[1] ];
 				}
