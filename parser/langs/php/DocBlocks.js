@@ -605,13 +605,13 @@ module.exports = {
 		this.populateClassHierarchy( blocks );
 		this.resolveDefTypes( blocks );
 
-		if ( this._autoInherit ) {
-			this.autoInheritDocs( blocks );
-		}
-
 		//parse descriptions
 		for ( var i = blocks.length - 1; i >= 0; --i ) {
 			this.renderDescriptions( blocks[i] );
+		}
+		
+		if ( this._autoInherit ) {
+			this.autoInheritDocs( blocks );
 		}
 		
 	},
