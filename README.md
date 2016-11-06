@@ -596,3 +596,4 @@ sources, only read as plain text and their first comment extracted.
 Authors
 -------
 Borislav Peev (borislav.asdf at gmail dot com)
+Tino Jahnke (tino.jahnke at web dot de)
