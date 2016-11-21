@@ -354,7 +354,7 @@ is the subfolder.
 `-intro` tells jsdocgen to parse this file as markdown and show it on the
 front, before any API is selected.
 
-`-autoinherit` will make jsdocgen attemt to automatically inherit
+`-autoinherit` will make jsdocgen attempt to automatically inherit
 documentation for class members without a doc comment. For example if you have
 interface which defines a method and class which implements this interface.
 But the method is not implemented by the class but by a trait that the class
